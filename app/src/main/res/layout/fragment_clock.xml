@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ClockFragment">
+
+    <TextClock
+        android:id="@+id/dateClockView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:format12Hour="yyyy.MM.dd"
+        android:format24Hour="yyyy.MM.dd"
+        android:textSize="25sp"
+        android:includeFontPadding="false"
+        tools:text="2020.12.20"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextClock
+        android:id="@+id/dayOfWeekClockView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:format12Hour="E"
+        android:format24Hour="E"
+        android:textSize="15sp"
+        android:includeFontPadding="false"
+        tools:text="Sun"
+        app:layout_constraintBottom_toBottomOf="@id/dateClockView"
+        app:layout_constraintStart_toEndOf="@id/dateClockView"
+        android:layout_marginBottom="2sp"
+        android:layout_marginLeft="5sp" />
+
+    <TextClock
+        android:id="@+id/timeClockView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:format12Hour="hh:mm"
+        android:format24Hour="HH:mm"
+        android:textColor="@color/colorPrimaryFont"
+        android:textSize="85sp"
+        android:includeFontPadding="false"
+        tools:text="11:52"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextClock
+        android:id="@+id/secondsClockView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:format12Hour="ss"
+        android:format24Hour="ss"
+        android:textSize="20sp"
+        android:includeFontPadding="false"
+        tools:text="34"
+        app:layout_constraintBottom_toBottomOf="@id/timeClockView"
+        app:layout_constraintStart_toEndOf="@id/timeClockView"
+        android:layout_marginBottom="18sp"
+        android:layout_marginLeft="5sp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
