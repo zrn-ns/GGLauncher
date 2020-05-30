@@ -38,6 +38,7 @@ class CommonPagerActivity : FragmentActivity() {
         val pagerAdapter = ScreenSlidePagerAdapter(supportFragmentManager)
         mPager.adapter = pagerAdapter
         mPager.currentItem = START_POSITION
+        mPager.setPageTransformer(true, ZoomOutPageTransformer())
     }
 
     override fun onBackPressed() {
