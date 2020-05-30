@@ -10,7 +10,6 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
-import kotlinx.android.synthetic.main.fragment_common_pager.*
 
 class CommonPagerFragment : Fragment() {
 
@@ -24,10 +23,10 @@ class CommonPagerFragment : Fragment() {
 
 }
 
-private const val START_POSITION = 2
-private val FRAGMENTS = arrayOf(ClockFragment(), ClockFragment(), ClockFragment(), ClockFragment(), ClockFragment())
+abstract class CommonPagerActivity : FragmentActivity() {
 
-class CommonPagerActivity : FragmentActivity() {
+    abstract fun startPosition(): Int
+    abstract fun fragments(): Array<Fragment>
 
     private lateinit var mPager: ViewPager
     private lateinit var tabLayout: TabLayout
@@ -41,7 +40,7 @@ class CommonPagerActivity : FragmentActivity() {
 
         val pagerAdapter = ScreenSlidePagerAdapter(supportFragmentManager)
         mPager.adapter = pagerAdapter
-        mPager.currentItem = START_POSITION
+        mPager.currentItem = startPosition()
         mPager.setPageTransformer(true, ZoomOutPageTransformer())
 
         tabLayout.setupWithViewPager(mPager, true)
@@ -52,7 +51,16 @@ class CommonPagerActivity : FragmentActivity() {
     }
 
     private inner class ScreenSlidePagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
-        override fun getCount(): Int = FRAGMENTS.size
-        override fun getItem(position: Int): Fragment = FRAGMENTS.get(position)
+        override fun getCount(): Int = fragments().size
+        override fun getItem(position: Int): Fragment = fragments().get(position)
+    }
+}
+
+class LauncherPagerActivity : CommonPagerActivity() {
+    override fun startPosition(): Int = 2
+    override fun fragments(): Array<Fragment> = arrayOf(ClockFragment(), ClockFragment(), ClockFragment(), ClockFragment(), ClockFragment())
+
+    override fun finish() {
+        // Disable home button
     }
 }
