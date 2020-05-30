@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clearTaskOnLaunch="true"
     tools:context=".CommonPagerFragment">
 
     <androidx.viewpager.widget.ViewPager
@@ -21,7 +22,7 @@
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabDots"
         android:layout_width="match_parent"
-        android:layout_height="20dp"
+        android:layout_height="18dp"
         app:layout_constraintBottom_toBottomOf="@+id/viewPager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
