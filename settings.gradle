@@ -1,0 +1,2 @@
+rootProject.name='GGLauncher'
+include ':app'
