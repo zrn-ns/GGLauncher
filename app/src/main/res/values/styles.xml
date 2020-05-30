@@ -3,7 +3,6 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowBackground">@color/colorBackgroundView</item>
-        <item name="android:background">@color/colorBackgroundView</item>
         <item name="android:colorEdgeEffect">@android:color/white</item>
         <item name="android:textColor">@color/colorPrimaryFont</item>
         <item name="android:windowFullscreen">true</item>

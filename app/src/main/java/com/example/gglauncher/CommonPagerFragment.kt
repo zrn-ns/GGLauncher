@@ -9,6 +9,8 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager.widget.ViewPager
+import com.google.android.material.tabs.TabLayout
+import kotlinx.android.synthetic.main.fragment_common_pager.*
 
 class CommonPagerFragment : Fragment() {
 
@@ -28,25 +30,25 @@ private val FRAGMENTS = arrayOf(ClockFragment(), ClockFragment(), ClockFragment(
 class CommonPagerActivity : FragmentActivity() {
 
     private lateinit var mPager: ViewPager
+    private lateinit var tabLayout: TabLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_common_pager)
 
         mPager = findViewById(R.id.viewPager)
+        tabLayout = findViewById(R.id.tabDots)
 
         val pagerAdapter = ScreenSlidePagerAdapter(supportFragmentManager)
         mPager.adapter = pagerAdapter
         mPager.currentItem = START_POSITION
         mPager.setPageTransformer(true, ZoomOutPageTransformer())
+
+        tabLayout.setupWithViewPager(mPager, true)
     }
 
     override fun onBackPressed() {
-        if (mPager.currentItem == 0) {
-            super.onBackPressed()
-        } else {
-            mPager.currentItem = mPager.currentItem - 1
-        }
+        // Disable Back key
     }
 
     private inner class ScreenSlidePagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorBackgroundView"
     tools:context=".ClockFragment">
 
     <TextClock
@@ -24,7 +25,7 @@
         android:id="@+id/dayOfWeekClockView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5sp"
+        android:layout_marginStart="5sp"
         android:layout_marginBottom="2sp"
         android:format12Hour="E"
         android:format24Hour="E"
@@ -53,7 +54,7 @@
         android:id="@+id/secondsClockView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5sp"
+        android:layout_marginStart="5sp"
         android:layout_marginBottom="18sp"
         android:format12Hour="ss"
         android:format24Hour="ss"

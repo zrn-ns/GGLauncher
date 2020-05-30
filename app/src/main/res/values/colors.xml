@@ -3,4 +3,6 @@
     <color name="colorPrimaryFont">#FFFFFF</color>
     <color name="colorBackgroundView">#000000</color>
     <color name="colorPagerBackgroundView">#222222</color>
+    <color name="colorTabIndicatorDefault">#777777</color>
+    <color name="colorTabIndicatorSelected">#FFFFFF</color>
 </resources>
