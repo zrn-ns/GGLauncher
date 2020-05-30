@@ -23,7 +23,7 @@ class CommonPagerFragment : Fragment() {
 }
 
 private const val START_POSITION = 2
-private var FRAGMENTS = arrayOf(ClockFragment(), ClockFragment(), ClockFragment(), ClockFragment(), ClockFragment())
+private val FRAGMENTS = arrayOf(ClockFragment(), ClockFragment(), ClockFragment(), ClockFragment(), ClockFragment())
 
 class CommonPagerActivity : FragmentActivity() {
 
