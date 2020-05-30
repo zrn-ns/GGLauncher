@@ -14,25 +14,25 @@
         android:layout_marginTop="16dp"
         android:format12Hour="yyyy.MM.dd"
         android:format24Hour="yyyy.MM.dd"
-        android:textSize="25sp"
         android:includeFontPadding="false"
-        tools:text="2020.12.20"
+        android:textSize="25sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="2020.12.20" />
 
     <TextClock
         android:id="@+id/dayOfWeekClockView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="5sp"
+        android:layout_marginBottom="2sp"
         android:format12Hour="E"
         android:format24Hour="E"
-        android:textSize="15sp"
         android:includeFontPadding="false"
-        tools:text="Sun"
+        android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="@id/dateClockView"
         app:layout_constraintStart_toEndOf="@id/dateClockView"
-        android:layout_marginBottom="2sp"
-        android:layout_marginLeft="5sp" />
+        tools:text="Sun" />
 
     <TextClock
         android:id="@+id/timeClockView"
@@ -41,26 +41,26 @@
         android:layout_marginStart="16dp"
         android:format12Hour="hh:mm"
         android:format24Hour="HH:mm"
+        android:includeFontPadding="false"
         android:textColor="@color/colorPrimaryFont"
         android:textSize="85sp"
-        android:includeFontPadding="false"
-        tools:text="11:52"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="11:52" />
 
     <TextClock
         android:id="@+id/secondsClockView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="5sp"
+        android:layout_marginBottom="18sp"
         android:format12Hour="ss"
         android:format24Hour="ss"
-        android:textSize="20sp"
         android:includeFontPadding="false"
-        tools:text="34"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@id/timeClockView"
         app:layout_constraintStart_toEndOf="@id/timeClockView"
-        android:layout_marginBottom="18sp"
-        android:layout_marginLeft="5sp" />
+        tools:text="34" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimaryFont">#FFFFFF</color>
+    <color name="colorBackgroundView">#000000</color>
+    <color name="colorPagerBackgroundView">#222222</color>
 </resources>
