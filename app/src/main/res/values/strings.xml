@@ -1,6 +1,4 @@
 <resources>
     <string name="app_name">GGLauncher</string>
-    <!-- Strings used for fragments for navigation -->
-
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="app_name_camera">Camera</string>
 </resources>

@@ -2,18 +2,16 @@ package com.zrnns.gglauncher.launcher
 
 import android.view.KeyEvent
 import androidx.fragment.app.Fragment
+import com.zrnns.gglauncher.camera_app.CameraPageFragment
 import com.zrnns.gglauncher.camera_app.openCameraActivity
 import com.zrnns.gglauncher.core.CommonPagerActivity
 
 class LauncherPagerActivity : CommonPagerActivity() {
-    override fun startPosition(): Int = 2
+    override fun startPosition(): Int = 0
     override fun fragments(): Array<Fragment> =
         arrayOf(
             ClockFragment(),
-            ClockFragment(),
-            ClockFragment(),
-            ClockFragment(),
-            ClockFragment()
+            CameraPageFragment()
         )
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
