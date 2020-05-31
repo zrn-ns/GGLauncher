@@ -1,4 +1,4 @@
-package com.example.gglauncher
+package com.zrnns.gglauncher
 
 import android.view.View
 import androidx.viewpager.widget.ViewPager

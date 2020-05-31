@@ -1,4 +1,4 @@
-package com.example.gglauncher
+package com.zrnns.gglauncher
 
 import android.os.Bundle
 import android.view.LayoutInflater

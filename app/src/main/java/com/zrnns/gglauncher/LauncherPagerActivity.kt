@@ -1,4 +1,4 @@
-package com.example.gglauncher
+package com.zrnns.gglauncher
 
 import androidx.fragment.app.Fragment
 
