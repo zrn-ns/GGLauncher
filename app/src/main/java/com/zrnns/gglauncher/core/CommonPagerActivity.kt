@@ -1,4 +1,4 @@
-package com.zrnns.gglauncher
+package com.zrnns.gglauncher.core
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
+import com.zrnns.gglauncher.R
 
 abstract class CommonPagerActivity : FragmentActivity() {
 
@@ -26,7 +27,9 @@ abstract class CommonPagerActivity : FragmentActivity() {
         val pagerAdapter = ScreenSlidePagerAdapter(supportFragmentManager)
         mPager.adapter = pagerAdapter
         mPager.currentItem = startPosition()
-        mPager.setPageTransformer(true, ZoomOutPageTransformer())
+        mPager.setPageTransformer(true,
+            ZoomOutPageTransformer()
+        )
 
         tabLayout.setupWithViewPager(mPager, true)
     }
