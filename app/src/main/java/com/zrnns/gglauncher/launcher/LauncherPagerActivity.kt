@@ -7,6 +7,7 @@ import com.zrnns.gglauncher.camera_app.openCameraActivity
 import com.zrnns.gglauncher.core.CommonPagerActivity
 
 class LauncherPagerActivity : CommonPagerActivity() {
+
     override fun startPosition(): Int = 0
     override fun fragments(): Array<Fragment> =
         arrayOf(
@@ -28,6 +29,14 @@ class LauncherPagerActivity : CommonPagerActivity() {
             return true
         }
         return super.onKeyLongPress(keyCode, event)
+    }
+
+    override fun onTapPage(position: Int) {
+        when (position) {
+            1 -> {
+                openCameraActivity(this)
+            }
+        }
     }
 
     private fun openCameraActivityIfInstalled() {

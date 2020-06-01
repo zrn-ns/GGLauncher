@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import com.zrnns.gglauncher.R
+import com.zrnns.gglauncher.core.GlassGestureDetector
 import com.zrnns.gglauncher.core.StandardAppPageFragment
 
 class CameraPageFragment: StandardAppPageFragment() {

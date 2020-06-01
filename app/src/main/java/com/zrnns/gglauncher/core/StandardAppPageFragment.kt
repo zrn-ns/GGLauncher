@@ -1,7 +1,6 @@
 package com.zrnns.gglauncher.core
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-
+import androidx.fragment.app.Fragment
 import com.zrnns.gglauncher.R
 
 /**
