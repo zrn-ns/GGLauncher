@@ -1,4 +1,4 @@
-package com.zrnns.gglauncher.camera_app
+package com.zrnns.gglauncher.gallery_app
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

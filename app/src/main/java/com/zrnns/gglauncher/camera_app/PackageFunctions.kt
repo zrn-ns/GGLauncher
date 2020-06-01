@@ -18,7 +18,7 @@ fun openCameraActivity(fromActivity: Activity) {
     } else {
         Toast.makeText(
             fromActivity.applicationContext,
-            "Camera app Not Installed. Please install it from https://github.com/googlesamples/glass-enterprise-samples.",
+            "App Not Installed. Please install from https://github.com/googlesamples/glass-enterprise-samples.",
             Toast.LENGTH_LONG
         ).show()
     }

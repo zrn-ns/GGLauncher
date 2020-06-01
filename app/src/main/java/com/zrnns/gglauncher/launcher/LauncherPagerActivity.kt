@@ -3,8 +3,10 @@ package com.zrnns.gglauncher.launcher
 import android.view.KeyEvent
 import androidx.fragment.app.Fragment
 import com.zrnns.gglauncher.camera_app.CameraPageFragment
+import com.zrnns.gglauncher.gallery_app.GalleryPageFragment
 import com.zrnns.gglauncher.camera_app.openCameraActivity
 import com.zrnns.gglauncher.core.CommonPagerActivity
+import com.zrnns.gglauncher.gallery_app.openGalleryActivity
 
 class LauncherPagerActivity : CommonPagerActivity() {
 
@@ -12,7 +14,8 @@ class LauncherPagerActivity : CommonPagerActivity() {
     override fun fragments(): Array<Fragment> =
         arrayOf(
             ClockFragment(),
-            CameraPageFragment()
+            CameraPageFragment(),
+            GalleryPageFragment()
         )
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
@@ -35,6 +38,9 @@ class LauncherPagerActivity : CommonPagerActivity() {
         when (position) {
             1 -> {
                 openCameraActivity(this)
+            }
+            2 -> {
+                openGalleryActivity(this)
             }
         }
     }
