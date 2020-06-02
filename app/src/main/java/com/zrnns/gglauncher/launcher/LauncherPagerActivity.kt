@@ -7,12 +7,15 @@ import com.zrnns.gglauncher.gallery_app.GalleryPageFragment
 import com.zrnns.gglauncher.camera_app.openCameraActivity
 import com.zrnns.gglauncher.core.CommonPagerActivity
 import com.zrnns.gglauncher.gallery_app.openGalleryActivity
+import com.zrnns.gglauncher.settings_app.SettingsLauncherPageFragment
+import com.zrnns.gglauncher.settings_app.openAndroidSettingsActivity
 
 class LauncherPagerActivity : CommonPagerActivity() {
 
-    override fun startPosition(): Int = 0
+    override fun startPosition(): Int = 1
     override fun fragments(): Array<Fragment> =
         arrayOf(
+            SettingsLauncherPageFragment(),
             ClockFragment(),
             CameraPageFragment(),
             GalleryPageFragment()
@@ -36,10 +39,13 @@ class LauncherPagerActivity : CommonPagerActivity() {
 
     override fun onTapPage(position: Int) {
         when (position) {
-            1 -> {
-                openCameraActivity(this)
+            0 -> {
+                openAndroidSettingsActivity(this)
             }
             2 -> {
+                openCameraActivity(this)
+            }
+            3 -> {
                 openGalleryActivity(this)
             }
         }
