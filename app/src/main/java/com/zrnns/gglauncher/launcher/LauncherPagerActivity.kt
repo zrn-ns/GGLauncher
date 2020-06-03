@@ -1,7 +1,9 @@
 package com.zrnns.gglauncher.launcher
 
+import android.content.Intent
 import android.view.KeyEvent
 import androidx.fragment.app.Fragment
+import com.zrnns.gglauncher.assistant.AssistantActivity
 import com.zrnns.gglauncher.camera_app.CameraPageFragment
 import com.zrnns.gglauncher.gallery_app.GalleryPageFragment
 import com.zrnns.gglauncher.camera_app.openCameraActivity
@@ -41,6 +43,12 @@ class LauncherPagerActivity : CommonPagerActivity() {
         when (position) {
             0 -> {
                 openAndroidSettingsActivity(this)
+            }
+            1 -> {
+                val intent = Intent(this, AssistantActivity::class.java)
+//                val intent = Intent()
+//                intent.setClassName("com.zrnns.gglauncher.assistant", "com.zrnns.gglauncher.assistant.AssistantActivity")
+                this.startActivity(intent)
             }
             2 -> {
                 openCameraActivity(this)

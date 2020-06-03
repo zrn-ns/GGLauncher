@@ -51,7 +51,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation project(path: ':grpc')
-    implementation('com.google.auth:google-auth-library-oauth2-http:0.20.0') {
+    implementation('com.google.auth:google-auth-library-oauth2-http:0.6.0') {
         exclude group: 'org.apache.httpcomponents', module: 'httpclient'
     }
     implementation 'com.android.support:support-annotations:27.1.0'

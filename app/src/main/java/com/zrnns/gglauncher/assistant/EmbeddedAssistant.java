@@ -444,8 +444,18 @@ public class EmbeddedAssistant {
      */
     public static UserCredentials generateCredentials(Context context, int resourceId)
             throws IOException, JSONException {
-        InputStream inputStream = context.getResources().openRawResource(resourceId);
-        return UserCredentials.fromStream(inputStream);
+//        InputStream inputStream = context.getResources().openRawResource(resourceId);
+//        return UserCredentials.from(inputStream);
+
+        InputStream is = context.getResources().openRawResource(resourceId);
+        byte[] bytes = new byte[is.available()];
+        is.read(bytes);
+        JSONObject json = new JSONObject(new String(bytes, "UTF-8"));
+        return new UserCredentials(
+                json.getString("client_id"),
+                json.getString("client_secret"),
+                json.getString("refresh_token")
+        );
     }
 
     /**
