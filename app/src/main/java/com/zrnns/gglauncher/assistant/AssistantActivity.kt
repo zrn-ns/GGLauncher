@@ -1,207 +1,106 @@
 package com.zrnns.gglauncher.assistant
 
-import android.app.Activity
-import android.content.Context
-import android.media.AudioDeviceInfo
-import android.media.AudioManager
+import android.graphics.Color
 import android.os.Bundle
-import android.os.Handler
-import android.preference.PreferenceManager
 import android.util.Base64
-import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import android.webkit.WebView
 import android.widget.*
-import com.google.assistant.embedded.v1alpha2.SpeechRecognitionResult
-import com.google.auth.oauth2.UserCredentials
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import com.zrnns.gglauncher.R
-import com.zrnns.gglauncher.assistant.EmbeddedAssistant.Companion.generateCredentials
-import com.zrnns.gglauncher.assistant.EmbeddedAssistant.ConversationCallback
-import com.zrnns.gglauncher.assistant.EmbeddedAssistant.RequestCallback
-import org.json.JSONException
-import org.json.JSONObject
-import java.io.IOException
-import java.io.UnsupportedEncodingException
+import com.zrnns.gglauncher.core.GlassGestureDetector
 import java.util.*
 
-class AssistantActivity : Activity() {
-    private lateinit var mButtonWidget: Button
-    private var mMainHandler: Handler? = null
+class AssistantActivity : AppCompatActivity(), GlassGestureDetector.OnGestureListener {
 
-    // List & adapter to store and display the history of Assistant Requests.
-    private lateinit var mEmbeddedAssistant: EmbeddedAssistant
-    private val mAssistantRequests =
-        ArrayList<String>()
-    private var mAssistantRequestsAdapter: ArrayAdapter<String>? = null
-    private lateinit var mHtmlOutputCheckbox: CheckBox
+    private lateinit var viewModel: AssistantActivityViewModel
+    private val glassGestureDetector: GlassGestureDetector by lazy { GlassGestureDetector(this, this) }
+
     private lateinit var mWebView: WebView
+    private lateinit var inputMessageView: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.i(TAG, "starting assistant demo")
-        setContentView(R.layout.activity_main)
-        val assistantRequestsListView =
-            findViewById<ListView>(R.id.assistantRequestsListView)
-        mAssistantRequestsAdapter = ArrayAdapter(
-            this, android.R.layout.simple_list_item_1,
-            mAssistantRequests
-        )
-        assistantRequestsListView.adapter = mAssistantRequestsAdapter
-        mHtmlOutputCheckbox = findViewById(R.id.htmlOutput)
-        mHtmlOutputCheckbox.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { compoundButton, useHtml ->
-            mWebView.visibility = if (useHtml) View.VISIBLE else View.GONE
-            assistantRequestsListView.visibility = if (useHtml) View.GONE else View.VISIBLE
-            mEmbeddedAssistant!!.setResponseFormat(if (useHtml) EmbeddedAssistant.HTML else EmbeddedAssistant.TEXT)
-        })
-        mWebView = findViewById(R.id.webview)
-        mWebView.getSettings().javaScriptEnabled = true
-        mMainHandler = Handler(mainLooper)
-        mButtonWidget = findViewById(R.id.assistantQueryButton)
-        mButtonWidget.setOnClickListener(View.OnClickListener { mEmbeddedAssistant.startConversation() })
 
-        // Audio routing configuration: use default routing.
-        val audioInputDevice: AudioDeviceInfo? = null
-        val audioOutputDevice: AudioDeviceInfo? = null
+        setupViews()
+        setupObservers()
 
-        // Set volume from preferences
-        val preferences = PreferenceManager.getDefaultSharedPreferences(this)
-        val initVolume = preferences.getInt(
-            PREF_CURRENT_VOLUME,
-            DEFAULT_VOLUME
-        )
-        Log.i(
-            TAG,
-            "setting audio track volume to: $initVolume"
-        )
-        var userCredentials: UserCredentials? = null
-        try {
-            userCredentials =
-                generateCredentials(this, R.raw.credentials)
-        } catch (e: IOException) {
-            Log.e(TAG, "error getting user credentials", e)
-        } catch (e: JSONException) {
-            Log.e(TAG, "error getting user credentials", e)
-        }
-        mEmbeddedAssistant = EmbeddedAssistant.Builder()
-            .setCredentials(userCredentials)
-            .setDeviceInstanceId(DEVICE_INSTANCE_ID)
-            .setDeviceModelId(DEVICE_MODEL_ID)
-            .setLanguageCode(LANGUAGE_CODE)
-            .setAudioInputDevice(audioInputDevice)
-            .setAudioOutputDevice(audioOutputDevice)
-            .setAudioSampleRate(SAMPLE_RATE)
-            .setAudioVolume(initVolume)
-            .setRequestCallback(object : RequestCallback() {
-                override fun onRequestStart() {
-                    Log.i(
-                        TAG,
-                        "starting assistant request, enable microphones"
-                    )
-                    mButtonWidget.setText("聞き取り中")
-                    mButtonWidget.setEnabled(false)
-                }
-
-                override fun onSpeechRecognition(results: List<SpeechRecognitionResult?>?) {
-                    for (result in results!!) {
-                        Log.i(
-                            TAG,
-                            "assistant request text: " + result!!.transcript +
-                                    " stability: " + java.lang.Float.toString(result.stability)
-                        )
-                        mAssistantRequestsAdapter!!.add(result.transcript)
-                    }
-                }
-            })
-            .setConversationCallback(object : ConversationCallback() {
-                override fun onError(throwable: Throwable?) {
-                    Log.e(
-                        TAG,
-                        "assist error: " + throwable!!.message,
-                        throwable
-                    )
-                }
-
-                override fun onVolumeChanged(percentage: Int) {
-                    Log.i(
-                        TAG,
-                        "assistant volume changed: $percentage"
-                    )
-                    // Update our shared preferences
-                    val editor = PreferenceManager
-                        .getDefaultSharedPreferences(this@AssistantActivity)
-                        .edit()
-                    editor.putInt(PREF_CURRENT_VOLUME, percentage)
-                    editor.apply()
-                }
-
-                override fun onConversationFinished() {
-                    Log.i(
-                        TAG,
-                        "assistant conversation finished"
-                    )
-                    mButtonWidget.setText("聞き取る")
-                    mButtonWidget.setEnabled(true)
-                }
-
-                override fun onAssistantResponse(response: String?) {
-                    if (!response!!.isEmpty()) {
-                        Log.i(TAG, response)
-                        mMainHandler!!.post { mAssistantRequestsAdapter!!.add("Google Assistant: $response") }
-                    }
-                }
-
-                override fun onAssistantDisplayOut(html: String?) {
-                    mMainHandler!!.post { // Need to convert to base64
-                        try {
-                            Log.i(TAG, html)
-                            val data = html!!.toByteArray(charset("UTF-8"))
-                            val base64String =
-                                Base64.encodeToString(
-                                    data,
-                                    Base64.DEFAULT
-                                )
-                            mWebView.loadData(
-                                base64String, "text/html; charset=utf-8",
-                                "base64"
-                            )
-                        } catch (e: UnsupportedEncodingException) {
-                            e.printStackTrace()
-                        }
-                    }
-                }
-            })
-            .build()
-        mEmbeddedAssistant!!.connect()
-    }
-
-    private fun findAudioDevice(deviceFlag: Int, deviceType: Int): AudioDeviceInfo? {
-        val manager =
-            this.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-        val adis = manager.getDevices(deviceFlag)
-        for (adi in adis) {
-            if (adi.type == deviceType) {
-                return adi
-            }
-        }
-        return null
+        viewModel.onCreateAction()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.i(TAG, "destroying assistant demo")
-        mEmbeddedAssistant!!.destroy()
+        viewModel.onDestroyAction()
     }
 
-    companion object {
-        private val TAG = AssistantActivity::class.java.simpleName
+    override fun onGesture(gesture: GlassGestureDetector.Gesture): Boolean {
+        when (gesture) {
+            GlassGestureDetector.Gesture.TAP -> {
+                viewModel.viewTappedAction()
+            }
+            GlassGestureDetector.Gesture.SWIPE_UP -> {
+                viewModel.viewSwipedUpAction()
+            }
+        }
+        return true
+    }
 
-        // Audio constants.
-        private const val PREF_CURRENT_VOLUME = "current_volume"
-        private const val SAMPLE_RATE = 16000
-        private const val DEFAULT_VOLUME = 100
+    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+        return if (glassGestureDetector.onTouchEvent(event)) {
+            true
+        } else super.dispatchTouchEvent(event)
+    }
 
-        // Assistant SDK constants.
-        private const val DEVICE_MODEL_ID = "gglauncher-dev-google-glass-zfhcc1"
-        private const val DEVICE_INSTANCE_ID = "PLACEHOLDER"
-        private const val LANGUAGE_CODE = "ja-JP"
+    private fun setupViews() {
+        setContentView(R.layout.activity_assistant)
+
+        mWebView = findViewById(R.id.webview)
+        mWebView.setInitialScale(100)
+        mWebView.settings.javaScriptEnabled = true
+        mWebView.settings.useWideViewPort = true
+        mWebView.settings.loadWithOverviewMode = true
+        mWebView.setBackgroundColor(resources.getColor(R.color.colorTransparent, theme))
+
+        inputMessageView = findViewById(R.id.inputMessageView)
+    }
+
+    private fun setupObservers() {
+        viewModel = AssistantActivityViewModel(applicationContext)
+
+        val htmlObserver = Observer<String?>() {
+            it?.let {
+                mWebView.visibility = View.VISIBLE
+
+                val data = it.toByteArray(charset(Charsets.UTF_8.name()))
+                val base64String =
+                    Base64.encodeToString(
+                        data,
+                        Base64.DEFAULT
+                    )
+                mWebView.loadData(base64String, "text/html; charset=utf-8", "base64")
+            } ?: run {
+                mWebView.visibility = View.GONE
+            }
+        }
+        val messageObserver = Observer<String>() {
+            inputMessageView.text = it
+        }
+        val messageColorObserver = Observer<Color>() {
+            inputMessageView.setTextColor(it.toArgb())
+        }
+        val messageTextSizeObserver = Observer<Float>() {
+            inputMessageView.textSize = it
+        }
+        val activityFinishTriggerObserver = Observer<UUID> {
+            finish()
+        }
+
+        viewModel.html.observe(this, htmlObserver)
+        viewModel.message.observe(this, messageObserver)
+        viewModel.messageColor.observe(this, messageColorObserver)
+        viewModel.messageTextSize.observe(this, messageTextSizeObserver)
+        viewModel.activityFinishTrigger.observe(this, activityFinishTriggerObserver)
     }
 }

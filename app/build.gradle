@@ -55,4 +55,5 @@ dependencies {
         exclude group: 'org.apache.httpcomponents', module: 'httpclient'
     }
     implementation 'com.android.support:support-annotations:27.1.0'
+    implementation 'org.jsoup:jsoup:1.11.2'
 }

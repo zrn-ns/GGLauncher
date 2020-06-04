@@ -2,8 +2,10 @@
 <resources>
     <color name="colorAppIcon">#FFFFFF</color>
     <color name="colorPrimaryFont">#FFFFFF</color>
+    <color name="colorSubFont">#777777</color>
     <color name="colorBackgroundView">#000000</color>
     <color name="colorPagerBackgroundView">#222222</color>
     <color name="colorTabIndicatorDefault">#777777</color>
     <color name="colorTabIndicatorSelected">#FFFFFF</color>
+    <color name="colorTransparent">#00000000</color>
 </resources>

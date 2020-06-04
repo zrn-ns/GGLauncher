@@ -1,6 +1,7 @@
 package com.zrnns.gglauncher.assistant
 
 import android.content.Context
+import android.content.res.Resources
 import android.media.*
 import android.os.Handler
 import android.os.HandlerThread
@@ -17,7 +18,7 @@ import io.grpc.stub.StreamObserver
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
-import java.io.InputStream
+import java.lang.Exception
 import java.lang.annotation.Retention
 import java.lang.annotation.RetentionPolicy
 import java.nio.ByteBuffer
@@ -25,6 +26,37 @@ import java.util.*
 
 
 class EmbeddedAssistant private constructor() {
+
+    companion object {
+        private val TAG = EmbeddedAssistant::class.java.simpleName
+        private const val ASSISTANT_API_ENDPOINT = "embeddedassistant.googleapis.com"
+        private const val AUDIO_RECORD_BLOCK_SIZE = 1024
+        const val TEXT = 0
+        const val HTML = 1
+
+        /**
+         * Generates access tokens for the Assistant based on a credentials JSON file.
+         *
+         * @param context Application context
+         * @param resourceId The resource that contains the project credentials
+         *
+         * @return A [UserCredentials] object which can be used by the Assistant.
+         * @throws IOException If the resource does not exist.
+         * @throws JSONException If the resource is incorrectly formatted.
+         */
+        fun generateCredentials(context: Context, resourceId: Int): UserCredentials {
+            val inputStream = context.resources.openRawResource(resourceId)
+            val bytes = ByteArray(inputStream.available())
+            inputStream.read(bytes)
+            val json = JSONObject(String(bytes, Charsets.UTF_8))
+            return UserCredentials(
+                json.getString("client_id"),
+                json.getString("client_secret"),
+                json.getString("refresh_token")
+            )
+        }
+    }
+
     // Device Actions
     private var mDeviceConfig: DeviceConfig? = null
 
@@ -63,12 +95,6 @@ class EmbeddedAssistant private constructor() {
     private val mAssistantResponseObserver: StreamObserver<AssistResponse> = object :
         StreamObserver<AssistResponse> {
         override fun onNext(value: AssistResponse) {
-            if (DEBUG) {
-                Log.d(
-                    TAG,
-                    "Received response: $value"
-                )
-            }
             if (value.deviceAction != null &&
                 !value.deviceAction.deviceRequestJson.isEmpty()
             ) {
@@ -679,39 +705,5 @@ class EmbeddedAssistant private constructor() {
          * Called when the entire conversation is finished.
          */
         open fun onConversationFinished() {}
-    }
-
-    companion object {
-        private val TAG = EmbeddedAssistant::class.java.simpleName
-        private const val DEBUG = false
-        private const val ASSISTANT_API_ENDPOINT = "embeddedassistant.googleapis.com"
-        private const val AUDIO_RECORD_BLOCK_SIZE = 1024
-        const val TEXT = 0
-        const val HTML = 1
-
-        /**
-         * Generates access tokens for the Assistant based on a credentials JSON file.
-         *
-         * @param context Application context
-         * @param resourceId The resource that contains the project credentials
-         *
-         * @return A [UserCredentials] object which can be used by the Assistant.
-         * @throws IOException If the resource does not exist.
-         * @throws JSONException If the resource is incorrectly formatted.
-         */
-        @Throws(IOException::class, JSONException::class)
-        fun generateCredentials(context: Context, resourceId: Int): UserCredentials {
-//            val inputStream = context.resources.openRawResource(resourceId);
-//            return UserCredentials.from(inputStream);
-            val `is` = context.resources.openRawResource(resourceId)
-            val bytes = ByteArray(`is`.available())
-            `is`.read(bytes)
-            val json = JSONObject(String(bytes, Charsets.UTF_8))
-            return UserCredentials(
-                json.getString("client_id"),
-                json.getString("client_secret"),
-                json.getString("refresh_token")
-            )
-        }
     }
 }
