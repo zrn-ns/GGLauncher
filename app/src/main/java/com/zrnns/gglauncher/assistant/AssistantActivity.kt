@@ -144,6 +144,7 @@ class AssistantActivity : Activity() {
 
                 override fun onAssistantResponse(response: String?) {
                     if (!response!!.isEmpty()) {
+                        Log.i(TAG, response)
                         mMainHandler!!.post { mAssistantRequestsAdapter!!.add("Google Assistant: $response") }
                     }
                 }
@@ -151,6 +152,7 @@ class AssistantActivity : Activity() {
                 override fun onAssistantDisplayOut(html: String?) {
                     mMainHandler!!.post { // Need to convert to base64
                         try {
+                            Log.i(TAG, html)
                             val data = html!!.toByteArray(charset("UTF-8"))
                             val base64String =
                                 Base64.encodeToString(
