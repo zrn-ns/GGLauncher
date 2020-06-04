@@ -200,7 +200,7 @@ class AssistantActivity : Activity() {
         private const val DEFAULT_VOLUME = 100
 
         // Assistant SDK constants.
-        private const val DEVICE_MODEL_ID = "PLACEHOLDER"
+        private const val DEVICE_MODEL_ID = "gglauncher-dev-google-glass-zfhcc1"
         private const val DEVICE_INSTANCE_ID = "PLACEHOLDER"
         private const val LANGUAGE_CODE = "ja-JP"
     }
