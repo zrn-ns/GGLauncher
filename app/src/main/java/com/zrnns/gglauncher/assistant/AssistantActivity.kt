@@ -168,43 +168,6 @@ class AssistantActivity : Activity() {
                         }
                     }
                 }
-
-                override fun onDeviceAction(
-                    intentName: String?,
-                    parameters: JSONObject?
-                ) {
-                    if (parameters != null) {
-                        Log.d(
-                            TAG,
-                            "Get device action " + intentName + " with parameters: " +
-                                    parameters.toString()
-                        )
-                    } else {
-                        Log.d(
-                            TAG,
-                            "Get device action " + intentName + " with no paramete"
-                                    + "rs"
-                        )
-                    }
-                    if (intentName == "action.devices.commands.OnOff") {
-                        try {
-                            val turnOn = parameters!!.getBoolean("on")
-                            //                                mLed.setValue(turnOn);
-                        } catch (e: JSONException) {
-                            Log.e(
-                                TAG,
-                                "Cannot get value of command",
-                                e
-                            )
-                        } catch (e: Exception) {
-                            Log.e(
-                                TAG,
-                                "Cannot set value of LED",
-                                e
-                            )
-                        }
-                    }
-                }
             })
             .build()
         mEmbeddedAssistant!!.connect()
