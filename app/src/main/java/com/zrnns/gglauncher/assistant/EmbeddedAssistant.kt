@@ -86,6 +86,7 @@ class EmbeddedAssistant private constructor() {
     private var mAssistantHandler: Handler? = null
     private val mAssistantResponses =
         ArrayList<ByteBuffer>()
+    private var mAssistDisplayOut: ScreenOut? = null
 
     // gRPC client and stream observers.
     private var mAudioOutSize // Tracks the size of audio responses to determine when it ends.
@@ -172,6 +173,7 @@ class EmbeddedAssistant private constructor() {
                 mConversationHandler!!.post { mConversationCallback!!.onAudioSample(audioData) }
             }
             if (value.hasScreenOut()) {
+                mAssistDisplayOut = value.screenOut
                 mConversationHandler!!.post {
                     mConversationCallback!!.onAssistantDisplayOut(
                         value.screenOut.data.toStringUtf8()
@@ -203,7 +205,6 @@ class EmbeddedAssistant private constructor() {
                     AudioTrack.WRITE_BLOCKING
                 )
             }
-            mAssistantResponses.clear()
             audioTrack.stop()
             audioTrack.release()
             mConversationHandler!!.post { mConversationCallback!!.onResponseFinished() }
@@ -212,8 +213,9 @@ class EmbeddedAssistant private constructor() {
                 startConversation()
             } else {
                 // The conversation is done
-                mConversationHandler!!.post { mConversationCallback!!.onConversationFinished() }
+                mConversationHandler!!.post { mConversationCallback!!.onConversationFinished(mAssistantResponses.isEmpty() && mAssistDisplayOut == null) }
             }
+            mAssistantResponses.clear()
         }
     }
     private val mStreamAssistantRequest: Runnable = object : Runnable {
@@ -283,6 +285,7 @@ class EmbeddedAssistant private constructor() {
             )
         }
         mAssistantHandler!!.post(mStreamAssistantRequest)
+        mAssistDisplayOut = null
     }
 
     /**
@@ -297,7 +300,7 @@ class EmbeddedAssistant private constructor() {
             }
         }
         mAudioRecord!!.stop()
-        mConversationHandler!!.post { mConversationCallback!!.onConversationFinished() }
+        mConversationHandler!!.post { mConversationCallback!!.onConversationFinished(false) }
     }
 
     @Retention(RetentionPolicy.SOURCE)
@@ -677,6 +680,6 @@ class EmbeddedAssistant private constructor() {
         /**
          * Called when the entire conversation is finished.
          */
-        open fun onConversationFinished() {}
+        open fun onConversationFinished(isTimeout: Boolean) {}
     }
 }

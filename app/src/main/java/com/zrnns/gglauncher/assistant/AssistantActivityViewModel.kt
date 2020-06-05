@@ -109,6 +109,10 @@ class AssistantActivityViewModel(context: Context): androidx.lifecycle.ViewModel
         activityFinishTrigger.value = UUID.randomUUID()
     }
 
+    fun timeoutAction() {
+        activityFinishTrigger.value = UUID.randomUUID()
+    }
+
     // private functions
 
     private fun setupGoogleAssistant() {
@@ -197,7 +201,10 @@ class AssistantActivityViewModel(context: Context): androidx.lifecycle.ViewModel
                     editor.apply()
                 }
 
-                override fun onConversationFinished() {
+                override fun onConversationFinished(isTimeout: Boolean) {
+                    if (isTimeout) {
+                        timeoutAction()
+                    }
                 }
 
                 override fun onAssistantResponse(response: String?) {
