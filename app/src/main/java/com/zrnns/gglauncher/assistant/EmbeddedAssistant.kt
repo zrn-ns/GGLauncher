@@ -285,32 +285,6 @@ class EmbeddedAssistant private constructor() {
         mAssistantHandler!!.post(mStreamAssistantRequest)
     }
 
-    fun startConversation(inputQuery: String?) {
-        mRequestCallback!!.onRequestStart()
-        mAssistantHandler!!.post {
-            mAssistantRequestObserver = mAssistantService!!.assist(mAssistantResponseObserver)
-            val assistConfigBuilder = AssistConfig.newBuilder()
-                .setTextQuery(inputQuery)
-                .setAudioOutConfig(mAudioOutConfig)
-                .setDeviceConfig(mDeviceConfig)
-                .setScreenOutConfig(mScreenOutConfig)
-            val dialogStateInBuilder = DialogStateIn.newBuilder()
-            if (mConversationState != null) {
-                dialogStateInBuilder.conversationState = mConversationState
-            }
-            if (mDeviceLocation != null) {
-                dialogStateInBuilder.deviceLocation = mDeviceLocation
-            }
-            dialogStateInBuilder.languageCode = mLanguageCode
-            assistConfigBuilder.dialogStateIn = dialogStateInBuilder.build()
-            mAssistantRequestObserver!!.onNext(
-                AssistRequest.newBuilder()
-                    .setConfig(assistConfigBuilder.build())
-                    .build()
-            )
-        }
-    }
-
     /**
      * Manually ends a conversation with the Assistant.
      */
