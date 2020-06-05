@@ -39,9 +39,10 @@ class GoogleAssistantJsonParser {
 
         private fun generateInfoHtml(document: Document): String {
             var mainAreaElement = document.getElementById("assistant-main-cards")
-            mainAreaElement.allElements.forEach {
-                it.attr("style", "flex-wrap:wrap; color: white;")
-            }
+            // 見辛いのでいったんやめる
+//            mainAreaElement.allElements.forEach {
+//                it.attr("style", "flex-wrap:wrap; color: white;")
+//            }
             mainAreaElement.removeAttr("style")
             mainAreaElement.getElementById("assistant-bar")?.remove()
 

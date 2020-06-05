@@ -59,8 +59,9 @@ class AssistantActivity : AppCompatActivity(), GlassGestureDetector.OnGestureLis
         mWebView = findViewById(R.id.webview)
         mWebView.setInitialScale(100)
         mWebView.settings.javaScriptEnabled = true
-        mWebView.settings.useWideViewPort = true
-        mWebView.settings.loadWithOverviewMode = true
+        // 見辛いのでいったんやめる
+//        mWebView.settings.useWideViewPort = true
+//        mWebView.settings.loadWithOverviewMode = true
         mWebView.setBackgroundColor(resources.getColor(R.color.colorTransparent, theme))
 
         inputMessageView = findViewById(R.id.inputMessageView)
