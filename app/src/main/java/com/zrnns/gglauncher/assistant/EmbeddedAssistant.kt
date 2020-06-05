@@ -198,7 +198,6 @@ class EmbeddedAssistant private constructor() {
             audioTrack.play()
             mConversationHandler!!.post { mConversationCallback!!.onResponseStarted() }
             for (audioData in mAssistantResponses) {
-                mConversationHandler!!.post { mConversationCallback!!.onAudioSample(audioData) }
                 audioTrack.write(
                     audioData, audioData.remaining(),
                     AudioTrack.WRITE_BLOCKING
