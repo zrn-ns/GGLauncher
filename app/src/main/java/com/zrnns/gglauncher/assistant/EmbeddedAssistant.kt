@@ -84,8 +84,7 @@ class EmbeddedAssistant private constructor() {
     private var mMicrophoneMode: MicrophoneMode? = null
     private var mAssistantThread: HandlerThread? = null
     private var mAssistantHandler: Handler? = null
-    private val mAssistantResponses =
-        ArrayList<ByteBuffer>()
+    private val mAssistantResponses = ArrayList<ByteBuffer>()
     private var mAssistDisplayOut: ScreenOut? = null
 
     // gRPC client and stream observers.
@@ -300,6 +299,7 @@ class EmbeddedAssistant private constructor() {
             }
         }
         mAudioRecord!!.stop()
+        mAssistantResponses.clear()
         mConversationHandler!!.post { mConversationCallback!!.onConversationFinished(false) }
     }
 
