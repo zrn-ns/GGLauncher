@@ -2,6 +2,7 @@ package com.zrnns.gglauncher.core
 
 import android.os.Bundle
 import android.view.MotionEvent
+import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
@@ -88,6 +89,10 @@ abstract class CommonPagerActivity : FragmentActivity(), GlassGestureDetector.On
 
     fun selectTab(position: Int) {
         mPager.currentItem = position
+    }
+
+    fun setTabLayoutHidden(isHidden: Boolean) {
+        tabLayout.visibility = if (isHidden) View.GONE else View.VISIBLE
     }
 
     private inner class ScreenSlidePagerAdapter(fm: FragmentManager) :

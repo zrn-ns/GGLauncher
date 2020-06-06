@@ -1,16 +1,12 @@
 package com.zrnns.gglauncher.assistant.standard_version
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.MotionEvent
-import android.view.View
-import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import coil.api.load
-import com.zrnns.gglauncher.R
 import com.zrnns.gglauncher.core.CommonPagerActivity
 import com.zrnns.gglauncher.core.GlassGestureDetector
+import com.zrnns.gglauncher.core.StandardImagePageFragment
 import com.zrnns.gglauncher.core.observer.NonNullLiveData
 import java.util.*
 
@@ -47,6 +43,9 @@ class AssistantActivity : CommonPagerActivity() {
             GlassGestureDetector.Gesture.SWIPE_UP -> {
                 viewModel.viewSwipedUpAction()
             }
+            else -> {
+                return super.onGesture(gesture)
+            }
         }
         return true
     }
@@ -58,9 +57,32 @@ class AssistantActivity : CommonPagerActivity() {
     }
 
     private fun setupObservers() {
-        val activityFinishTriggerObserver = Observer<UUID> {
+        viewModel.assistantResultContent.observe(this, Observer<AssistantActivityViewModel.AssistantResultContent?> { content ->
+            var newFragments: List<Fragment> = listOf()
+            content?.let {
+                val otherImageFragments = content.otherImageUrls.map {
+                    StandardImagePageFragment(it)
+                }
+                newFragments = listOf(firstPageFragment) + otherImageFragments
+            } ?: run {
+                newFragments = listOf(firstPageFragment)
+            }
+
+            if (fragments.value != newFragments) {
+                fragments.value = newFragments
+            }
+
+            val needsToHideTabLayout: Boolean = {
+                content?.let {
+                    it.otherImageUrls.isEmpty()
+                } ?: run {
+                    true
+                }
+            }()
+            super.setTabLayoutHidden(needsToHideTabLayout)
+        })
+        viewModel.activityFinishTrigger.observe(this, Observer<UUID> {
             finish()
-        }
-        viewModel.activityFinishTrigger.observe(this, activityFinishTriggerObserver)
+        })
     }
 }
