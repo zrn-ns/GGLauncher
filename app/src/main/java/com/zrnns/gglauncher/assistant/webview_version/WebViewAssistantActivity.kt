@@ -6,7 +6,7 @@ import android.util.Base64
 import android.view.MotionEvent
 import android.view.View
 import android.webkit.WebView
-import android.widget.*
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.zrnns.gglauncher.R

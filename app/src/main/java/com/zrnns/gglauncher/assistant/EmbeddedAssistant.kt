@@ -1,7 +1,6 @@
 package com.zrnns.gglauncher.assistant
 
 import android.content.Context
-import android.content.res.Resources
 import android.media.*
 import android.os.Handler
 import android.os.HandlerThread
@@ -18,7 +17,6 @@ import io.grpc.stub.StreamObserver
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
-import java.lang.Exception
 import java.lang.annotation.Retention
 import java.lang.annotation.RetentionPolicy
 import java.nio.ByteBuffer

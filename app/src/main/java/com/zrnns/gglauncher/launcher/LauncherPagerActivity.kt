@@ -3,7 +3,6 @@ package com.zrnns.gglauncher.launcher
 import android.content.Intent
 import android.view.KeyEvent
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.MutableLiveData
 import com.zrnns.gglauncher.assistant.standard_version.AssistantActivity
 import com.zrnns.gglauncher.camera_app.CameraPageFragment
 import com.zrnns.gglauncher.camera_app.openCameraActivity
