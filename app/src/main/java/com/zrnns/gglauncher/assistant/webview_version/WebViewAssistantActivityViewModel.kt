@@ -1,4 +1,4 @@
-package com.zrnns.gglauncher.assistant
+package com.zrnns.gglauncher.assistant.webview_version
 
 import android.content.Context
 import android.graphics.Color
@@ -12,14 +12,16 @@ import androidx.lifecycle.MutableLiveData
 import com.google.assistant.embedded.v1alpha2.SpeechRecognitionResult
 import com.google.auth.oauth2.UserCredentials
 import com.zrnns.gglauncher.R
+import com.zrnns.gglauncher.assistant.EmbeddedAssistant
+import com.zrnns.gglauncher.assistant.GoogleAssistantJsonParser
 import org.json.JSONException
 import java.io.IOException
 import java.util.*
 
-class AssistantActivityViewModel(context: Context): androidx.lifecycle.ViewModel() {
+class WebViewAssistantActivityViewModel(context: Context): androidx.lifecycle.ViewModel() {
 
     companion object {
-        private val TAG = AssistantActivity::class.java.simpleName
+        private val TAG = WebViewAssistantActivityViewModel::class.java.simpleName
 
         // Audio constants.
         private const val PREF_CURRENT_VOLUME = "current_volume"
@@ -60,7 +62,8 @@ class AssistantActivityViewModel(context: Context): androidx.lifecycle.ViewModel
         MutableLiveData()
 
     init {
-        status.value = Status.WAITING_FOR_TALKING
+        status.value =
+            Status.WAITING_FOR_TALKING
         message.value = "Listening..."
         messageColor.value = context.resources.getColor(R.color.colorPrimaryFont, context.theme) .toColor()
         messageTextSize.value = 42f
@@ -74,7 +77,8 @@ class AssistantActivityViewModel(context: Context): androidx.lifecycle.ViewModel
     }
 
     fun requestStartAction() {
-        status.value = Status.WAITING_FOR_TALKING
+        status.value =
+            Status.WAITING_FOR_TALKING
         message.value = "Listening..."
         messageColor.value = context.resources.getColor(R.color.colorPrimaryFont, context.theme) .toColor()
         messageTextSize.value = 42f
@@ -82,7 +86,8 @@ class AssistantActivityViewModel(context: Context): androidx.lifecycle.ViewModel
     }
 
     fun onTalkingAction(speechText: String) {
-        status.value = Status.TALKING
+        status.value =
+            Status.TALKING
         message.value = speechText
         messageColor.value = context.resources.getColor(R.color.colorPrimaryFont, context.theme) .toColor()
         messageTextSize.value = 42f
@@ -90,7 +95,8 @@ class AssistantActivityViewModel(context: Context): androidx.lifecycle.ViewModel
     }
 
     fun assistantDisplayOutAction(html: String?) {
-        status.value = Status.RESULT
+        status.value =
+            Status.RESULT
         messageColor.value = context.resources.getColor(R.color.colorSubFont, context.theme) .toColor()
         messageTextSize.value = 22f
         this.html.value = html

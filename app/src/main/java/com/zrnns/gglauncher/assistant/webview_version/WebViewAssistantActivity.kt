@@ -1,4 +1,4 @@
-package com.zrnns.gglauncher.assistant
+package com.zrnns.gglauncher.assistant.webview_version
 
 import android.graphics.Color
 import android.os.Bundle
@@ -13,9 +13,9 @@ import com.zrnns.gglauncher.R
 import com.zrnns.gglauncher.core.GlassGestureDetector
 import java.util.*
 
-class AssistantActivity : AppCompatActivity(), GlassGestureDetector.OnGestureListener {
+class WebViewAssistantActivity : AppCompatActivity(), GlassGestureDetector.OnGestureListener {
 
-    private lateinit var viewModel: AssistantActivityViewModel
+    private lateinit var viewModel: WebViewAssistantActivityViewModel
     private val glassGestureDetector: GlassGestureDetector by lazy { GlassGestureDetector(this, this) }
 
     private lateinit var mWebView: WebView
@@ -54,7 +54,7 @@ class AssistantActivity : AppCompatActivity(), GlassGestureDetector.OnGestureLis
     }
 
     private fun setupViews() {
-        setContentView(R.layout.activity_assistant)
+        setContentView(R.layout.activity_web_view_assistant)
 
         mWebView = findViewById(R.id.webview)
         mWebView.setInitialScale(100)
@@ -68,7 +68,10 @@ class AssistantActivity : AppCompatActivity(), GlassGestureDetector.OnGestureLis
     }
 
     private fun setupObservers() {
-        viewModel = AssistantActivityViewModel(applicationContext)
+        viewModel =
+            WebViewAssistantActivityViewModel(
+                applicationContext
+            )
 
         val htmlObserver = Observer<String?>() {
             it?.let {
