@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<font-family xmlns:android="http://schemas.android.com/apk/res/android">
+    <font
+        android:fontStyle="normal"
+        android:fontWeight="200"
+        android:font="@font/gen_shin_gothic_extra_light" />
+    <font
+        android:fontStyle="normal"
+        android:fontWeight="300"
+        android:font="@font/gen_shin_gothic_light" />
+    <font
+        android:fontStyle="normal"
+        android:fontWeight="400"
+        android:font="@font/gen_shin_gothic_normal" />
+    <font
+        android:fontStyle="normal"
+        android:fontWeight="450"
+        android:font="@font/gen_shin_gothic_regular" />
+    <font
+        android:fontStyle="normal"
+        android:fontWeight="500"
+        android:font="@font/gen_shin_gothic_medium" />
+    <font
+        android:fontStyle="normal"
+        android:fontWeight="700"
+        android:font="@font/gen_shin_gothic_bold" />
+    <font
+        android:fontStyle="normal"
+        android:fontWeight="900"
+        android:font="@font/gen_shin_gothic_heavy" />
+</font-family>
