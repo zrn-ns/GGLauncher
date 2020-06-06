@@ -6,42 +6,64 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import com.zrnns.gglauncher.R
-import com.zrnns.gglauncher.camera_app.openCameraActivity
+import com.zrnns.gglauncher.core.observer.NonNullLiveData
+import com.zrnns.gglauncher.core.observer.NonNullObserver
 
 
 abstract class CommonPagerActivity : FragmentActivity(), GlassGestureDetector.OnGestureListener {
 
     private val glassGestureDetector: GlassGestureDetector by lazy { GlassGestureDetector(this, this) }
 
-    abstract fun startPosition(): Int
-    abstract fun fragments(): Array<Fragment>
+    abstract var startPosition: Int
+    abstract var fragments: NonNullLiveData<List<Fragment>>
 
     private lateinit var mPager: ViewPager
     private lateinit var tabLayout: TabLayout
+    private var currentPosition: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_common_pager)
 
         mPager = findViewById(R.id.viewPager)
+        mPager.addOnPageChangeListener(object: ViewPager.SimpleOnPageChangeListener() {
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+                currentPosition = position
+            }
+        })
         tabLayout = findViewById(R.id.tabDots)
 
-        val pagerAdapter = ScreenSlidePagerAdapter(supportFragmentManager)
-        mPager.adapter = pagerAdapter
-        mPager.currentItem = startPosition()
-        mPager.setPageTransformer(true,
-            ZoomOutPageTransformer()
-        )
+        fragments.observe(this, NonNullObserver {
+            val pagerAdapter = ScreenSlidePagerAdapter(supportFragmentManager)
+            mPager.adapter = pagerAdapter
+            mPager.currentItem = {
+                currentPosition?.let {
+                    if (it < fragments.value.count()) {
+                        it
+                    } else {
+                        fragments.value.count()
+                    }
+                } ?: run {
+                    startPosition
+                }
+            }()
+
+            mPager.setPageTransformer(true,
+                ZoomOutPageTransformer()
+            )
+        })
 
         tabLayout.setupWithViewPager(mPager, true)
     }
 
     override fun onBackPressed() {
         // Disable Back key
-        selectTab(startPosition())
+        selectTab(startPosition)
     }
 
     override fun onGesture(gesture: GlassGestureDetector.Gesture): Boolean {
@@ -69,8 +91,14 @@ abstract class CommonPagerActivity : FragmentActivity(), GlassGestureDetector.On
     }
 
     private inner class ScreenSlidePagerAdapter(fm: FragmentManager) :
-        FragmentStatePagerAdapter(fm) {
-        override fun getCount(): Int = fragments().size
-        override fun getItem(position: Int): Fragment = fragments().get(position)
+        FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+        override fun getCount(): Int {
+            fragments.value.let {
+                return it.size
+            }
+        }
+        override fun getItem(position: Int): Fragment {
+            return fragments.value[position]
+        }
     }
 }
