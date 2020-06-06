@@ -6,6 +6,7 @@
         <item name="android:colorEdgeEffect">@android:color/white</item>
         <item name="android:textColor">@color/colorPrimaryFont</item>
         <item name="android:windowFullscreen">true</item>
+        <item name="android:fontFamily">@string/common_font</item>
     </style>
 
 </resources>
