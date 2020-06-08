@@ -8,4 +8,5 @@
     <color name="colorTabIndicatorDefault">#777777</color>
     <color name="colorTabIndicatorSelected">#FFFFFF</color>
     <color name="colorTransparent">#00000000</color>
+    <color name="colorOverlayBackground">#EE000000</color>
 </resources>

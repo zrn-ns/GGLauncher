@@ -8,5 +8,10 @@
         <item name="android:windowFullscreen">true</item>
         <item name="android:fontFamily">@font/gen_shin_gothic_extra_light</item>
     </style>
+    <style name="OverlayTheme" parent="AppTheme">
+        <item name="android:windowBackground">@color/colorOverlayBackground</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
 
 </resources>

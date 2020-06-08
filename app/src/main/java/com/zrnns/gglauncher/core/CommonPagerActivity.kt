@@ -35,6 +35,7 @@ abstract class CommonPagerActivity : FragmentActivity(), GlassGestureDetector.On
                 currentPosition = position
             }
         })
+
         tabLayout = findViewById(R.id.tabDots)
 
         fragments.observe(this, NonNullObserver {

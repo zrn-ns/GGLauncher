@@ -20,7 +20,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
-    android:background="@color/colorBackgroundView"
     android:gravity="center_vertical"
     android:orientation="vertical"
     android:paddingLeft="16dp"

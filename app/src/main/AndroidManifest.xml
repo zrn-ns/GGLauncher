@@ -17,8 +17,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".assistant.standard_version.AssistantActivity"></activity>
-        <activity android:name=".assistant.webview_version.WebViewAssistantActivity"></activity>
+        <activity
+            android:name=".assistant.standard_version.AssistantActivity"
+            android:theme="@style/OverlayTheme" />
+        <activity android:name=".assistant.webview_version.WebViewAssistantActivity" />
         <activity
             android:name=".launcher.LauncherPagerActivity"
             android:clearTaskOnLaunch="true"
