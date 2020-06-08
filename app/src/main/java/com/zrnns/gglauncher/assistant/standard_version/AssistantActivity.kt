@@ -40,8 +40,8 @@ class AssistantActivity : CommonPagerActivity() {
             GlassGestureDetector.Gesture.TAP -> {
                 viewModel.viewTappedAction()
             }
-            GlassGestureDetector.Gesture.SWIPE_UP -> {
-                viewModel.viewSwipedUpAction()
+            GlassGestureDetector.Gesture.SWIPE_DOWN -> {
+                viewModel.viewSwipedDownAction()
             }
             else -> {
                 return super.onGesture(gesture)

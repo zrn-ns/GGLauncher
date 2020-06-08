@@ -114,7 +114,7 @@ class AssistantActivityViewModel(context: Context): androidx.lifecycle.ViewModel
         mEmbeddedAssistant.startConversation()
     }
 
-    fun viewSwipedUpAction() {
+    fun viewSwipedDownAction() {
         activityFinishTrigger.value = UUID.randomUUID()
     }
 
