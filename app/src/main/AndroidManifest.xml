@@ -36,6 +36,7 @@
                 <category android:name="com.google.android.glass.category.DIRECTORY" />
             </intent-filter>
         </activity>
+        <activity android:name=".youtube.YoutubeMenuActivity" />
 
         <meta-data
             android:name="com.google.android.glass.TouchEnabledApplication"

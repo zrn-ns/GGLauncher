@@ -26,7 +26,7 @@ abstract class StandardAppPageFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_standard_app_page, container, false)
         // Inflate the layout for this fragment
         this.iconImageView = view.findViewById(R.id.iconImageView)
-        this.appNameTextView = view.findViewById(R.id.appNameTextView)
+        this.appNameTextView = view.findViewById(R.id.textView)
 
         return view
     }

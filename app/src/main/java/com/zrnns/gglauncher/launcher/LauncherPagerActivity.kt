@@ -15,6 +15,7 @@ import com.zrnns.gglauncher.gallery_app.GalleryPageFragment
 import com.zrnns.gglauncher.gallery_app.openGalleryActivity
 import com.zrnns.gglauncher.settings_app.SettingsLauncherPageFragment
 import com.zrnns.gglauncher.settings_app.openAndroidSettingsActivity
+import com.zrnns.gglauncher.youtube.YoutubeMenuActivity
 import com.zrnns.gglauncher.youtube.YoutubePageFragment
 import kotlinx.android.synthetic.main.fragment_common_pager.*
 
@@ -73,7 +74,8 @@ class LauncherPagerActivity : CommonPagerActivity() {
                 this.startActivity(intent)
             }
             2 -> {
-                // TODO: IMPLEMENTATION
+                val intent = Intent(this, YoutubeMenuActivity::class.java)
+                this.startActivity(intent)
             }
             3 -> {
                 openCameraActivity(this)
