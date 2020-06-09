@@ -9,6 +9,7 @@ import com.zrnns.gglauncher.assistant.standard_version.AssistantActivity
 import com.zrnns.gglauncher.camera_app.CameraPageFragment
 import com.zrnns.gglauncher.camera_app.openCameraActivity
 import com.zrnns.gglauncher.core.CommonPagerActivity
+import com.zrnns.gglauncher.core.GlassGestureDetector
 import com.zrnns.gglauncher.core.observer.NonNullLiveData
 import com.zrnns.gglauncher.gallery_app.GalleryPageFragment
 import com.zrnns.gglauncher.gallery_app.openGalleryActivity
@@ -50,6 +51,16 @@ class LauncherPagerActivity : CommonPagerActivity() {
             return true
         }
         return super.onKeyLongPress(keyCode, event)
+    }
+
+    override fun onGesture(gesture: GlassGestureDetector.Gesture): Boolean {
+        return when (gesture) {
+            GlassGestureDetector.Gesture.SWIPE_DOWN -> {
+                // Do Nothing
+                return true
+            }
+            else -> return super.onGesture(gesture)
+        }
     }
 
     override fun onTapPage(position: Int) {

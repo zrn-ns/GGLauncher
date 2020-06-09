@@ -72,6 +72,10 @@ abstract class CommonPagerActivity : FragmentActivity(), GlassGestureDetector.On
                 onTapPage(mPager.currentItem)
                 return true
             }
+            GlassGestureDetector.Gesture.SWIPE_DOWN -> {
+                finish()
+                return true
+            }
             else -> false
         }
     }
