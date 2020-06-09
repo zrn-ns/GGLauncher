@@ -7,9 +7,11 @@
 /.idea/workspace.xml
 /.idea/navEditor.xml
 /.idea/assetWizardSettings.xml
+/.idea/jarRepositories.xml
 .DS_Store
 /build
 /captures
 .externalNativeBuild
 .cxx
 credentials.json
+google_cloud_api_key.txt

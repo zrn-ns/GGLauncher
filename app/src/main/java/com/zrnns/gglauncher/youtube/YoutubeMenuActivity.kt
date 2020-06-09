@@ -4,11 +4,15 @@ import android.app.Activity
 import android.content.Intent
 import android.speech.RecognizerIntent
 import androidx.fragment.app.Fragment
+import com.google.api.client.http.javanet.NetHttpTransport
+import com.google.api.client.json.jackson2.JacksonFactory
+import com.google.api.services.youtube.YouTube
 import com.zrnns.gglauncher.R
 import com.zrnns.gglauncher.core.CommonPagerActivity
 import com.zrnns.gglauncher.core.GlassGestureDetector
 import com.zrnns.gglauncher.core.StandardTextPageFragment
 import com.zrnns.gglauncher.core.observer.NonNullLiveData
+import java.util.*
 
 
 class YoutubeMenuActivity : CommonPagerActivity() {
@@ -44,8 +48,25 @@ class YoutubeMenuActivity : CommonPagerActivity() {
             val results: List<String>? =
                 data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
             if (results != null && results.isNotEmpty() && results[0].isNotEmpty()) {
-                // TODO: open search result page
-                // updateUI(results[0])
+                val q = results[0]
+
+                Thread {
+                    val appName = applicationContext.getString(R.string.app_name)
+                    val apiKey: String = applicationContext.resources.openRawResource(R.raw.google_cloud_api_key).bufferedReader().readLine()
+
+                    val youtube = YouTube.Builder(NetHttpTransport(), JacksonFactory(), null).setApplicationName(appName).build()
+                    val search = youtube.Search().list("snippet")
+                    search.key = apiKey
+                    search.type = "video"
+                    search.q = q
+                    search.maxResults = 20
+                    search.regionCode = Locale.getDefault().country
+
+                    val res = search.execute()
+
+                    println(res)
+
+                }.start()
             }
         } else {
             // TODO: show error if needed

@@ -35,6 +35,10 @@ android {
         jvmTarget = "1.8"
     }
 
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+    }
+
 }
 
 dependencies {
@@ -57,4 +61,7 @@ dependencies {
     implementation 'com.android.support:support-annotations:27.1.0'
     implementation 'org.jsoup:jsoup:1.11.2'
     implementation 'io.coil-kt:coil:0.11.0'
+    implementation 'com.google.api-client:google-api-client:1.25.0'
+    implementation 'com.google.oauth-client:google-oauth-client-jetty:1.25.0'
+    implementation 'com.google.apis:google-api-services-youtube:v3-rev212-1.25.0'
 }
