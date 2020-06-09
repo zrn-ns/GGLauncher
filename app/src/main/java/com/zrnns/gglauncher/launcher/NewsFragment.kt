@@ -13,6 +13,12 @@ import java.util.*
 
 class NewsFragment : Fragment() {
 
+    companion object {
+        private const val UPDATE_FREQUENCY_MINUTES: Int = 5
+
+        private var lastUpdateDate: Date? = null
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -24,20 +30,23 @@ class NewsFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        Thread {
-            val url = getRssURL()
-            val document = Jsoup.connect(url).parser(Parser.xmlParser()).get()
-            val titles = document.select("item>title").shuffled().take(2).map { it.html() }
+        if (isNewsNotLoadedOrStale()) {
+            Thread {
+                val url = getRssURL()
+                val document = Jsoup.connect(url).parser(Parser.xmlParser()).get()
+                val titles = document.select("item>title").shuffled().take(2).map { it.html() }
 
-            activity?.runOnUiThread {
-                titles.getOrNull(0)?.let {
-                    textView1.text = it
+                activity?.runOnUiThread {
+                    titles.getOrNull(0)?.let {
+                        textView1.text = it
+                    }
+                    titles.getOrNull(1)?.let {
+                        textView2.text = it
+                    }
                 }
-                titles.getOrNull(1)?.let {
-                    textView2.text = it
-                }
-            }
-        }.start()
+                lastUpdateDate = Date()
+            }.start()
+        }
     }
 
     private fun getRssURL(): String {
@@ -50,5 +59,23 @@ class NewsFragment : Fragment() {
         val topic = "TECHNOLOGY"
 
         return "https://news.google.com/news/rss/headlines/section/topic/TECHNOLOGY?hl=$lang&gl=$country&ceid=$country:$lang"
+    }
+
+    private fun isNewsNotLoadedOrStale(): Boolean {
+        lastUpdateDate ?: return true
+
+        val expireDateCalendar = {
+            val tmpCalendar = Calendar.getInstance()
+            tmpCalendar.time = lastUpdateDate
+            tmpCalendar.add(Calendar.MINUTE, UPDATE_FREQUENCY_MINUTES)
+            tmpCalendar
+        }()
+
+        val currentDateCalendar = {
+            val tmpCalendar = Calendar.getInstance()
+            tmpCalendar.time = Date()
+            tmpCalendar
+        }()
+        return currentDateCalendar.after(expireDateCalendar)
     }
 }
