@@ -16,7 +16,7 @@ import com.zrnns.gglauncher.gallery_app.openGalleryActivity
 import com.zrnns.gglauncher.settings_app.SettingsLauncherPageFragment
 import com.zrnns.gglauncher.settings_app.openAndroidSettingsActivity
 import com.zrnns.gglauncher.youtube.YoutubeMenuActivity
-import com.zrnns.gglauncher.youtube.YoutubePageFragment
+import com.zrnns.gglauncher.youtube.YoutubeMenuPageFragment
 import kotlinx.android.synthetic.main.fragment_common_pager.*
 
 class LauncherPagerActivity : CommonPagerActivity() {
@@ -25,7 +25,7 @@ class LauncherPagerActivity : CommonPagerActivity() {
     override var fragments = NonNullLiveData<List<Fragment>>(listOf(
         SettingsLauncherPageFragment(),
         ClockFragment(),
-        YoutubePageFragment(),
+        YoutubeMenuPageFragment(),
         CameraPageFragment(),
         GalleryPageFragment()
     ).map {

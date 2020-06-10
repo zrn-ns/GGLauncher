@@ -12,6 +12,7 @@ import com.zrnns.gglauncher.core.CommonPagerActivity
 import com.zrnns.gglauncher.core.GlassGestureDetector
 import com.zrnns.gglauncher.core.StandardTextPageFragment
 import com.zrnns.gglauncher.core.observer.NonNullLiveData
+import com.zrnns.gglauncher.youtube.model.SearchResult
 import java.util.*
 
 
@@ -63,8 +64,19 @@ class YoutubeMenuActivity : CommonPagerActivity() {
                     search.regionCode = Locale.getDefault().country
 
                     val res = search.execute()
+                    val searchResults = res.items.map {
+                        SearchResult(it.snippet.title,
+                            Date(it.snippet.publishedAt.value),
+                            it.snippet.thumbnails.medium.url,
+                            it.snippet.channelTitle,
+                            it.id.videoId)
+                    }
 
-                    println(res)
+                    runOnUiThread {
+                        val intent = Intent(this, SearchResultsActivity::class.java)
+                        intent.putExtra(SearchResultsActivity.ACTIVITY_INPUT_SEARCH_RESULTS, ArrayList(searchResults))
+                        this.startActivity(intent)
+                    }
 
                 }.start()
             }

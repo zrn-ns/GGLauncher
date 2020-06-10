@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import com.zrnns.gglauncher.R
 import com.zrnns.gglauncher.core.StandardAppPageFragment
 
-class YoutubePageFragment: StandardAppPageFragment() {
+class YoutubeMenuPageFragment: StandardAppPageFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

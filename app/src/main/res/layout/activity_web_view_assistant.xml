@@ -47,7 +47,7 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/thumbnailImageView"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:scaleType="fitEnd"
@@ -65,7 +65,7 @@
             android:gravity="center|left"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintStart_toEndOf="@+id/thumbnailImageView"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Listening... aaa aaa aaaaaaaaaaaaaaaaaaaaa " />
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -19,7 +19,7 @@ class StandardImagePageFragment(private val imageUrl: String) : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_standard_image_page, container, false)
-        val imageView: ImageView = view.findViewById(R.id.imageView)
+        val imageView: ImageView = view.findViewById(R.id.thumbnailImageView)
         imageView.load(imageUrl)
         return view
     }
