@@ -57,7 +57,7 @@ class LauncherPagerActivity : CommonPagerActivity() {
     override fun onGesture(gesture: GlassGestureDetector.Gesture): Boolean {
         return when (gesture) {
             GlassGestureDetector.Gesture.SWIPE_DOWN -> {
-                // Do Nothing
+                moveToStartPage()
                 return true
             }
             else -> return super.onGesture(gesture)
@@ -88,5 +88,9 @@ class LauncherPagerActivity : CommonPagerActivity() {
 
     private fun openCameraActivityIfInstalled() {
         openCameraActivity(this)
+    }
+
+    private fun moveToStartPage() {
+        viewPager.currentItem = startPosition
     }
 }
