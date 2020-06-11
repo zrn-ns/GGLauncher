@@ -16,8 +16,10 @@ class NewsFragment : Fragment() {
     companion object {
         private const val UPDATE_FREQUENCY_MINUTES: Int = 5
 
-        private var lastUpdateDate: Date? = null
+        private var latestNewsDataCache: CachedNewsData? = null
     }
+
+    private data class CachedNewsData(val news1Text: String?, val news2Text: String?, val updateDate: Date)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,23 +32,20 @@ class NewsFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        if (isNewsNotLoadedOrStale()) {
-            Thread {
+        Thread {
+            if (isNewsNotLoadedOrStale()) {
                 val url = getRssURL()
                 val document = Jsoup.connect(url).parser(Parser.xmlParser()).get()
                 val titles = document.select("item>title").shuffled().take(2).map { it.html() }
 
-                activity?.runOnUiThread {
-                    titles.getOrNull(0)?.let {
-                        textView1.text = it
-                    }
-                    titles.getOrNull(1)?.let {
-                        textView2.text = it
-                    }
-                }
-                lastUpdateDate = Date()
-            }.start()
-        }
+                latestNewsDataCache = CachedNewsData(titles.getOrNull(0), titles.getOrNull(1), Date())
+            }
+
+            activity?.runOnUiThread {
+                textView1.text = latestNewsDataCache?.news1Text
+                textView2.text = latestNewsDataCache?.news2Text
+            }
+        }.start()
     }
 
     private fun getRssURL(): String {
@@ -62,11 +61,11 @@ class NewsFragment : Fragment() {
     }
 
     private fun isNewsNotLoadedOrStale(): Boolean {
-        lastUpdateDate ?: return true
+        val latestNewsDataCache = latestNewsDataCache?.let { it } ?: return true
 
         val expireDateCalendar = {
             val tmpCalendar = Calendar.getInstance()
-            tmpCalendar.time = lastUpdateDate
+            tmpCalendar.time = latestNewsDataCache.updateDate
             tmpCalendar.add(Calendar.MINUTE, UPDATE_FREQUENCY_MINUTES)
             tmpCalendar
         }()
