@@ -16,7 +16,7 @@
         android:format12Hour="yyyy.MM.dd"
         android:format24Hour="yyyy.MM.dd"
         android:includeFontPadding="false"
-        android:textSize="25sp"
+        android:textSize="36sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="2020.12.20" />
@@ -30,7 +30,7 @@
         android:format12Hour="E"
         android:format24Hour="E"
         android:includeFontPadding="false"
-        android:textSize="15sp"
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="@id/dateClockView"
         app:layout_constraintStart_toEndOf="@id/dateClockView"
         tools:text="Sun" />
@@ -44,7 +44,7 @@
         android:format24Hour="HH:mm"
         android:includeFontPadding="false"
         android:textColor="@color/colorPrimaryFont"
-        android:textSize="75sp"
+        android:textSize="100sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -59,7 +59,7 @@
         android:format12Hour="ss"
         android:format24Hour="ss"
         android:includeFontPadding="false"
-        android:textSize="20sp"
+        android:textSize="40sp"
         app:layout_constraintBottom_toBottomOf="@id/timeClockView"
         app:layout_constraintStart_toEndOf="@id/timeClockView"
         tools:text="34" />

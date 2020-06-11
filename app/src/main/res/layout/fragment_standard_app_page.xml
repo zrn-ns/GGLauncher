@@ -26,15 +26,16 @@
             app:srcCompat="@drawable/ic_app_icon_camera" />
 
         <Space
-            android:layout_width="10dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:layout_width="wrap_content" />
 
         <TextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="58sp"
+            android:layout_marginStart="20dp"
+            android:textSize="80sp"
             tools:text="Application" />
     </LinearLayout>
 

@@ -22,7 +22,7 @@
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="58sp"
+            android:textSize="80sp"
             tools:text="Search" />
     </LinearLayout>
 

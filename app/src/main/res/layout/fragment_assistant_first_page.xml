@@ -54,7 +54,7 @@
             android:autoSizeMaxTextSize="34sp"
             android:autoSizeMinTextSize="20sp"
             android:autoSizeTextType="uniform"
-            android:textSize="32sp"
+            android:textSize="35sp"
             tools:text="TextView"
             tools:visibility="visible" />
     </LinearLayout>
@@ -84,6 +84,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:gravity="center|left"
+            android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/thumbnailImageView"
