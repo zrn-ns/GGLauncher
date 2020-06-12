@@ -2,7 +2,6 @@ package com.zrnns.gglauncher.youtube
 
 import android.app.Activity
 import android.content.Intent
-import android.speech.RecognizerIntent
 import androidx.fragment.app.Fragment
 import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.jackson2.JacksonFactory
@@ -12,6 +11,7 @@ import com.zrnns.gglauncher.core.CommonPagerActivity
 import com.zrnns.gglauncher.core.GlassGestureDetector
 import com.zrnns.gglauncher.core.StandardTextPageFragment
 import com.zrnns.gglauncher.core.observer.NonNullLiveData
+import com.zrnns.gglauncher.core.speech_recognizer.SpeechRecognizerActivity
 import com.zrnns.gglauncher.youtube.model.SearchResult
 import java.util.*
 
@@ -46,10 +46,9 @@ class YoutubeMenuActivity : CommonPagerActivity() {
     ) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
-            val results: List<String>? =
-                data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-            if (results != null && results.isNotEmpty() && results[0].isNotEmpty()) {
-                val q = results[0]
+            val resultText: String? = data?.getStringExtra(SpeechRecognizerActivity.EXTRA_RESULT_TEXT)
+            resultText?.let {
+                val q = it
 
                 Thread {
                     val appName = applicationContext.getString(R.string.app_name)
@@ -86,11 +85,7 @@ class YoutubeMenuActivity : CommonPagerActivity() {
     }
 
     private fun requestVoiceRecognition() {
-        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
-        intent.putExtra(
-            RecognizerIntent.ACTION_WEB_SEARCH,
-            RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
-        )
+        val intent = Intent(this, SpeechRecognizerActivity::class.java)
         startActivityForResult(
             intent,
             REQUEST_CODE

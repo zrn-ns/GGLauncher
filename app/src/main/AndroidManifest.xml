@@ -17,7 +17,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".youtube.YoutubePlayerActivity"></activity>
+        <activity android:name=".core.speech_recognizer.SpeechRecognizerActivity"
+            android:theme="@style/OverlayTheme" />
+        <activity android:name=".youtube.YoutubePlayerActivity" />
         <activity android:name=".youtube.SearchResultsActivity" />
         <activity
             android:name=".assistant.standard_version.AssistantActivity"
