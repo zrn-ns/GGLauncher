@@ -1,5 +1,6 @@
 package com.zrnns.gglauncher.assistant.standard_version
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.media.AudioDeviceInfo
@@ -32,7 +33,8 @@ class AssistantActivityViewModel(context: Context): androidx.lifecycle.ViewModel
         // Assistant SDK constants.
         private const val DEVICE_MODEL_ID = "gglauncher-dev-google-glass-zfhcc1"
         private const val DEVICE_INSTANCE_ID = "PLACEHOLDER"
-        private const val LANGUAGE_CODE = "ja-JP"
+        @SuppressLint("ConstantLocale")
+        private val LANGUAGE_CODE = Locale.getDefault().toString()
     }
 
     enum class Status {
