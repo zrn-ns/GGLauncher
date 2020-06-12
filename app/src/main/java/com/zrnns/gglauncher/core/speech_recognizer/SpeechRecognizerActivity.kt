@@ -27,7 +27,7 @@ class SpeechRecognizerActivity : AppCompatActivity(), GlassGestureDetector.OnGes
 
         textView.text = "Listening..."
 
-        SpeechRecognizer().start(object: SpeechRecognizer.SpeechRecognizerCallback() {
+        SpeechRecognizer(applicationContext).start(object: SpeechRecognizer.SpeechRecognizerCallback() {
             override fun recognitionTimeout() {
                 cancelAndFinishRecognition()
             }

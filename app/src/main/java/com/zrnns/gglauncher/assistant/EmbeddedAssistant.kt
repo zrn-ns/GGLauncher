@@ -601,7 +601,7 @@ class EmbeddedAssistant private constructor() {
         /**
          * Called when a request has completed.
          */
-        fun onRequestFinish() {}
+        open fun onRequestFinish() {}
 
         /**
          * Called when audio is being recording. This may be called multiple times during a single
