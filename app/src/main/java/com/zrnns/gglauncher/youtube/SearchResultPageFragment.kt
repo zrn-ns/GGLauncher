@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import coil.api.load
 import com.zrnns.gglauncher.R
+import com.zrnns.gglauncher.core.utils.DurationUtils
 import com.zrnns.gglauncher.youtube.model.SearchResult
 import kotlinx.android.synthetic.main.fragment_youtube_movie_page.*
 import java.text.SimpleDateFormat
@@ -30,6 +31,7 @@ class SearchResultPageFragment(
         uploadDateTextView.text = formattedDate(dependency.publishedAt)
         thumbnailImageView.load(dependency.thumbnailUrl)
         channelNameTextView.text = dependency.channelName
+        durationTextView.text = DurationUtils.format(dependency.duration)
     }
 
     private fun formattedDate(date: Date): String {

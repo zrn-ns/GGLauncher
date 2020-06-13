@@ -13,6 +13,7 @@ import com.zrnns.gglauncher.core.StandardTextPageFragment
 import com.zrnns.gglauncher.core.observer.NonNullLiveData
 import com.zrnns.gglauncher.core.speech_recognizer.SpeechRecognizerActivity
 import com.zrnns.gglauncher.youtube.model.SearchResult
+import java.time.Duration
 import java.util.*
 
 
@@ -47,28 +48,33 @@ class YoutubeMenuActivity : CommonPagerActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
             val resultText: String? = data?.getStringExtra(SpeechRecognizerActivity.EXTRA_RESULT_TEXT)
-            resultText?.let {
-                val q = it
+            resultText?.let { speechText ->
 
                 Thread {
                     val appName = applicationContext.getString(R.string.app_name)
                     val apiKey: String = applicationContext.resources.openRawResource(R.raw.google_cloud_api_key).bufferedReader().readLine()
-
                     val youtube = YouTube.Builder(NetHttpTransport(), JacksonFactory(), null).setApplicationName(appName).build()
-                    val search = youtube.Search().list("snippet")
+
+                    // first, search videos
+                    val search = youtube.Search().list("id")
                     search.key = apiKey
                     search.type = "video"
-                    search.q = q
+                    search.q = speechText
                     search.maxResults = 20
                     search.regionCode = Locale.getDefault().country
 
-                    val res = search.execute()
-                    val searchResults = res.items.map {
+                    // next, get video details
+                    val detailsSearch = youtube.Videos().list("snippet,contentDetails")
+                    detailsSearch.key = apiKey
+                    detailsSearch.id = search.execute().items.map { it.id.videoId }.joinToString(",")
+
+                    val searchResults = detailsSearch.execute().items.map {
                         SearchResult(it.snippet.title,
                             Date(it.snippet.publishedAt.value),
                             it.snippet.thumbnails.medium.url,
                             it.snippet.channelTitle,
-                            it.id.videoId)
+                            Duration.parse(it.contentDetails.duration),
+                            it.id)
                     }
 
                     runOnUiThread {
