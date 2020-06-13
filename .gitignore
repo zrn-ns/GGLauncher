@@ -15,3 +15,4 @@
 .cxx
 credentials.json
 google_cloud_api_key.txt
+google_assistant_sdk_device_model_id.txt

@@ -18,9 +18,8 @@ import com.zrnns.gglauncher.assistant.GoogleAssistantJsonParser
 import org.json.JSONException
 import java.io.IOException
 import java.util.*
-import kotlin.collections.ArrayList
 
-class AssistantActivityViewModel(context: Context): androidx.lifecycle.ViewModel() {
+class AssistantActivityViewModel(val context: Context): androidx.lifecycle.ViewModel() {
 
     companion object {
         private val TAG = AssistantActivityViewModel::class.java.simpleName
@@ -31,7 +30,6 @@ class AssistantActivityViewModel(context: Context): androidx.lifecycle.ViewModel
         private const val DEFAULT_VOLUME = 100
 
         // Assistant SDK constants.
-        private const val DEVICE_MODEL_ID = "gglauncher-dev-google-glass-zfhcc1"
         private const val DEVICE_INSTANCE_ID = "PLACEHOLDER"
         @SuppressLint("ConstantLocale")
         private val LANGUAGE_CODE = Locale.getDefault().toString()
@@ -47,12 +45,10 @@ class AssistantActivityViewModel(context: Context): androidx.lifecycle.ViewModel
         constructor(jsonParserResult: GoogleAssistantJsonParser.Result) : this(jsonParserResult.message, jsonParserResult.imageUrls.firstOrNull(), jsonParserResult.imageUrls.drop(0)) {}
     }
 
-    private val context: Context = context
-
+    private val deviceModelId: String = context.resources.openRawResource(R.raw.google_assistant_sdk_device_model_id).bufferedReader().readLine()
     private var mMainHandler: Handler? = null
     // List & adapter to store and display the history of Assistant Requests.
     private lateinit var mEmbeddedAssistant: EmbeddedAssistant
-    private val mAssistantRequests = ArrayList<String>()
 
     // LiveData
     val message: MutableLiveData<String> =
@@ -169,7 +165,7 @@ class AssistantActivityViewModel(context: Context): androidx.lifecycle.ViewModel
         mEmbeddedAssistant = EmbeddedAssistant.Builder()
             .setCredentials(userCredentials)
             .setDeviceInstanceId(DEVICE_INSTANCE_ID)
-            .setDeviceModelId(DEVICE_MODEL_ID)
+            .setDeviceModelId(deviceModelId)
             .setLanguageCode(LANGUAGE_CODE)
             .setAudioInputDevice(audioInputDevice)
             .setAudioOutputDevice(audioOutputDevice)

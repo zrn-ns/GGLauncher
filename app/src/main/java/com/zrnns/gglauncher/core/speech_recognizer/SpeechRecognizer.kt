@@ -18,7 +18,6 @@ class SpeechRecognizer(val context: Context) {
         private const val SAMPLE_RATE = 16000
 
         // Assistant SDK constants.
-        private const val DEVICE_MODEL_ID = "gglauncher-dev-google-glass-zfhcc1"
         private const val DEVICE_INSTANCE_ID = "PLACEHOLDER"
         @SuppressLint("ConstantLocale")
         private val LANGUAGE_CODE = Locale.getDefault().toString()
@@ -39,6 +38,7 @@ class SpeechRecognizer(val context: Context) {
         }
     }
 
+    private val deviceModelId: String = context.resources.openRawResource(R.raw.google_assistant_sdk_device_model_id).bufferedReader().readLine()
     private lateinit var mEmbeddedAssistant: EmbeddedAssistant
     private var mMainHandler: Handler? = null
 
@@ -52,7 +52,7 @@ class SpeechRecognizer(val context: Context) {
         mEmbeddedAssistant = EmbeddedAssistant.Builder()
             .setCredentials(userCredentials)
             .setDeviceInstanceId(DEVICE_INSTANCE_ID)
-            .setDeviceModelId(DEVICE_MODEL_ID)
+            .setDeviceModelId(deviceModelId)
             .setLanguageCode(LANGUAGE_CODE)
             .setAudioSampleRate(SAMPLE_RATE)
             .setAudioVolume(0)
