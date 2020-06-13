@@ -6,13 +6,17 @@ import androidx.fragment.app.Fragment
 import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.jackson2.JacksonFactory
 import com.google.api.services.youtube.YouTube
+import com.google.auth.http.HttpCredentialsAdapter
 import com.zrnns.gglauncher.R
+import com.zrnns.gglauncher.assistant.EmbeddedAssistant
 import com.zrnns.gglauncher.core.CommonPagerActivity
 import com.zrnns.gglauncher.core.GlassGestureDetector
 import com.zrnns.gglauncher.core.StandardTextPageFragment
 import com.zrnns.gglauncher.core.observer.NonNullLiveData
 import com.zrnns.gglauncher.core.speech_recognizer.SpeechRecognizerActivity
+import com.zrnns.gglauncher.youtube.model.Playlist
 import com.zrnns.gglauncher.youtube.model.SearchResult
+import kotlinx.android.synthetic.main.fragment_common_pager.*
 import java.time.Duration
 import java.util.*
 
@@ -25,13 +29,26 @@ class YoutubeMenuActivity : CommonPagerActivity() {
 
     override var startPosition: Int = 0
     override var fragments: NonNullLiveData<List<Fragment>> = NonNullLiveData<List<Fragment>>(listOf(
-            StandardTextPageFragment(R.string.youtube_menu_search)
+            StandardTextPageFragment(R.string.youtube_menu_search),
+            StandardTextPageFragment(R.string.youtube_menu_playlists)
         ))
+
+    private val appName by lazy { applicationContext.getString(R.string.app_name) }
+    private val apiKey: String by lazy { applicationContext.resources.openRawResource(R.raw.google_cloud_api_key).bufferedReader().readLine() }
+    private val youtube by lazy { YouTube.Builder(NetHttpTransport(), JacksonFactory(), HttpCredentialsAdapter(credentials)).setApplicationName(appName).build() }
+    private val credentials by lazy { EmbeddedAssistant.generateCredentials(applicationContext, R.raw.credentials) }
 
     override fun onGesture(gesture: GlassGestureDetector.Gesture): Boolean {
         when (gesture) {
             GlassGestureDetector.Gesture.TAP -> {
-                requestVoiceRecognition()
+                when (viewPager.currentItem) {
+                    0 -> {
+                        requestVoiceRecognition()
+                    }
+                    1 -> {
+                        fetchPlaylists()
+                    }
+                }
             }
             else -> {
                 return super.onGesture(gesture)
@@ -51,10 +68,6 @@ class YoutubeMenuActivity : CommonPagerActivity() {
             resultText?.let { speechText ->
 
                 Thread {
-                    val appName = applicationContext.getString(R.string.app_name)
-                    val apiKey: String = applicationContext.resources.openRawResource(R.raw.google_cloud_api_key).bufferedReader().readLine()
-                    val youtube = YouTube.Builder(NetHttpTransport(), JacksonFactory(), null).setApplicationName(appName).build()
-
                     // first, search videos
                     val search = youtube.Search().list("id")
                     search.key = apiKey
@@ -96,5 +109,27 @@ class YoutubeMenuActivity : CommonPagerActivity() {
             intent,
             REQUEST_CODE
         )
+    }
+
+    private fun fetchPlaylists() {
+        Thread {
+            // first, search videos
+            val search = youtube.Playlists().list("snippet,contentDetails")
+            search.key = apiKey
+            search.maxResults = 50
+            search.mine = true
+            val playlists = search.execute().items.filter { it.contentDetails.itemCount > 0 }.sortedByDescending { it.contentDetails.itemCount }.map {
+                Playlist(it.snippet.title, it.snippet.thumbnails.medium.url, it.id)
+            }
+
+            runOnUiThread {
+                val intent = Intent(this, PlaylistsActivity::class.java)
+                intent.putExtra(
+                    PlaylistsActivity.ACTIVITY_INPUT_PLAYLISTS,
+                    ArrayList(playlists)
+                )
+                this.startActivity(intent)
+            }
+        }.start()
     }
 }
