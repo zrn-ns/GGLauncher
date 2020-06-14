@@ -13,6 +13,7 @@ import com.zrnns.gglauncher.core.GlassGestureDetector
 import com.zrnns.gglauncher.core.observer.NonNullLiveData
 import com.zrnns.gglauncher.gallery_app.GalleryPageFragment
 import com.zrnns.gglauncher.gallery_app.openGalleryActivity
+import com.zrnns.gglauncher.service.ForegroundService
 import com.zrnns.gglauncher.settings_app.SettingsLauncherPageFragment
 import com.zrnns.gglauncher.settings_app.openAndroidSettingsActivity
 import com.zrnns.gglauncher.youtube.YoutubeMenuActivity
@@ -36,6 +37,8 @@ class LauncherPagerActivity : CommonPagerActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewPager.setBackgroundColor(resources.getColor(R.color.colorPagerBackgroundView, theme))
+
+        startForegroundService(Intent(this, ForegroundService::class.java))
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
