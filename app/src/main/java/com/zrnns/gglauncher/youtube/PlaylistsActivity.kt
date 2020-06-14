@@ -27,7 +27,6 @@ class PlaylistsActivity : CommonPagerActivity() {
     }
 
     private val appName by lazy { applicationContext.getString(R.string.app_name) }
-    private val apiKey: String by lazy { applicationContext.resources.openRawResource(R.raw.google_cloud_api_key).bufferedReader().readLine() }
     private val youtube by lazy { YouTube.Builder(NetHttpTransport(), JacksonFactory(), HttpCredentialsAdapter(credentials)).setApplicationName(appName).build() }
     private val credentials by lazy { EmbeddedAssistant.generateCredentials(applicationContext, R.raw.credentials) }
 
@@ -65,13 +64,11 @@ class PlaylistsActivity : CommonPagerActivity() {
         Thread {
             // first, search videos
             val playlistItemSearch = youtube.PlaylistItems().list("id,snippet")
-            playlistItemSearch.key = apiKey
             playlistItemSearch.playlistId = playlists[viewPager.currentItem].playlistId
             playlistItemSearch.maxResults = 50
 
             // next, get video details
             val detailsSearch = youtube.Videos().list("snippet,contentDetails")
-            detailsSearch.key = apiKey
             detailsSearch.id = playlistItemSearch.execute().items.map { it.snippet.resourceId.videoId }.joinToString(",")
 
             val searchResults = detailsSearch.execute().items.map {
