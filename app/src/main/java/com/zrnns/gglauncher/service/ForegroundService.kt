@@ -7,7 +7,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.IBinder
 import android.os.PowerManager
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
@@ -17,6 +16,8 @@ import com.zrnns.gglauncher.R
 
 
 class ForegroundService : Service(), LifecycleOwner {
+
+    private val headGestureDetector by lazy { GlassHeadGestureDetector(applicationContext) }
 
     override fun onBind(intent: Intent): IBinder? {
         throw UnsupportedOperationException("Not yet implemented")
@@ -43,23 +44,24 @@ class ForegroundService : Service(), LifecycleOwner {
             setSmallIcon(R.drawable.ic_launcher_foreground)
         }.build()
 
-        GlassHeadGestureDetector.lookupGlassEvent?.observe(this, Observer {
+        headGestureDetector.startSubscribe()
+        headGestureDetector.lookupGlassEvent.observe(this, Observer {
             wakeFromSleep()
         })
+//
+//        Thread {
+//            // TODO: Implement
+//            for (i in 1..40) {
+//                Thread.sleep(1000)
+//                Log.i("INFO", "${i} sec spent");
+//            }
+//        }.start()
 
-        Thread {
-            // TODO: Implement
-            for (i in 1..40) {
-                Thread.sleep(1000)
-                Log.i("INFO", "${i} sec spent");
-            }
-        }.start()
-
-        Thread {
-            Thread.sleep(20000)
-            wakeFromSleep()
-            Log.i("INFO", "wake from sleep");
-        }.start()
+//        Thread {
+//            Thread.sleep(20000)
+//            wakeFromSleep()
+//            Log.i("INFO", "wake from sleep");
+//        }.start()
 
         stopForeground(Service.STOP_FOREGROUND_DETACH)
 
@@ -72,6 +74,7 @@ class ForegroundService : Service(), LifecycleOwner {
         super.onDestroy()
 
         lifecycleRegistry.currentState = Lifecycle.State.DESTROYED
+        headGestureDetector.endSubscribe()
     }
 
     private fun wakeFromSleep() {
@@ -79,7 +82,7 @@ class ForegroundService : Service(), LifecycleOwner {
             .newWakeLock(
                  PowerManager.FULL_WAKE_LOCK
                          or PowerManager.ACQUIRE_CAUSES_WAKEUP
-                        or PowerManager.ON_AFTER_RELEASE, ":disable_lock"
+                         or PowerManager.ON_AFTER_RELEASE, ":disable_lock"
             )
         wakelock.acquire(0)
         wakelock.release()
