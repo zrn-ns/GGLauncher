@@ -45,23 +45,11 @@ class ForegroundService : Service(), LifecycleOwner {
         }.build()
 
         headGestureDetector.startSubscribe()
-        headGestureDetector.lookupGlassEvent.observe(this, Observer {
-            wakeFromSleep()
+        headGestureDetector.onLookup?.observe(this, Observer {
+            it?.let {
+                wakeFromSleep()
+            }
         })
-//
-//        Thread {
-//            // TODO: Implement
-//            for (i in 1..40) {
-//                Thread.sleep(1000)
-//                Log.i("INFO", "${i} sec spent");
-//            }
-//        }.start()
-
-//        Thread {
-//            Thread.sleep(20000)
-//            wakeFromSleep()
-//            Log.i("INFO", "wake from sleep");
-//        }.start()
 
         stopForeground(Service.STOP_FOREGROUND_DETACH)
 
