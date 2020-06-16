@@ -39,7 +39,7 @@ class SensorEventManager(context: Context) : SensorEventListener {
 
         // SensorManagerにリスナーを登録
         val samplingFrequency = if (isTakeOff) SensorManager.SENSOR_DELAY_NORMAL else SensorManager.SENSOR_DELAY_UI
-//        Log.i("INFO", "samplingFrequency was changed. isTakeOff: $isTakeOff")
+
         sensorManager.registerListener(this, accelerometerSensor, samplingFrequency)
         sensorManager.registerListener(this, magneticFieldSensor, samplingFrequency)
     }

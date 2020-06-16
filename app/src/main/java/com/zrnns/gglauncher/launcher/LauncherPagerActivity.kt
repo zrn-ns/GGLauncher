@@ -1,7 +1,10 @@
 package com.zrnns.gglauncher.launcher
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.os.PowerManager
+import android.provider.Settings
 import android.view.KeyEvent
 import androidx.fragment.app.Fragment
 import com.zrnns.gglauncher.R
@@ -39,6 +42,14 @@ class LauncherPagerActivity : CommonPagerActivity() {
         viewPager.setBackgroundColor(resources.getColor(R.color.colorPagerBackgroundView, theme))
 
         startForegroundService(Intent(this, ForegroundService::class.java))
+
+        val powerManager: PowerManager? =
+            getSystemService(PowerManager::class.java)
+        if (!powerManager!!.isIgnoringBatteryOptimizations(packageName)) {
+            val intent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS)
+            intent.data = Uri.parse("package:" + packageName)
+            startActivity(intent)
+        }
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {

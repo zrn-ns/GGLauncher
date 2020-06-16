@@ -138,10 +138,6 @@ class AssistantActivityViewModel(val context: Context): androidx.lifecycle.ViewM
             PREF_CURRENT_VOLUME,
             DEFAULT_VOLUME
         )
-        Log.i(
-            TAG,
-            "setting audio track volume to: $initVolume"
-        )
         var userCredentials: UserCredentials? = null
         try {
             userCredentials =
@@ -173,10 +169,6 @@ class AssistantActivityViewModel(val context: Context): androidx.lifecycle.ViewM
             .setAudioVolume(initVolume)
             .setRequestCallback(object : EmbeddedAssistant.RequestCallback() {
                 override fun onRequestStart() {
-                    Log.i(
-                        TAG,
-                        "starting assistant request, enable microphones"
-                    )
                     requestStartAction()
                 }
 
@@ -188,18 +180,9 @@ class AssistantActivityViewModel(val context: Context): androidx.lifecycle.ViewM
             })
             .setConversationCallback(object : EmbeddedAssistant.ConversationCallback() {
                 override fun onError(throwable: Throwable?) {
-                    Log.e(
-                        TAG,
-                        "assist error: " + throwable!!.message,
-                        throwable
-                    )
                 }
 
                 override fun onVolumeChanged(percentage: Int) {
-                    Log.i(
-                        TAG,
-                        "assistant volume changed: $percentage"
-                    )
                     // Update our shared preferences
                     val editor = PreferenceManager.getDefaultSharedPreferences(
                         context

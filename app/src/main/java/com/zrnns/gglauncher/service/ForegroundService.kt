@@ -18,6 +18,8 @@ import com.zrnns.gglauncher.R
 class ForegroundService : Service(), LifecycleOwner {
 
     private val headGestureDetector by lazy { GlassHeadGestureDetector(applicationContext) }
+    private var keepServiceAliveWakeLock: PowerManager.WakeLock? = null
+    private var turnScreenOnWakeLock: PowerManager.WakeLock? = null
 
     override fun onBind(intent: Intent): IBinder? {
         throw UnsupportedOperationException("Not yet implemented")
@@ -55,6 +57,11 @@ class ForegroundService : Service(), LifecycleOwner {
 
         startForeground(1, notification)
 
+        val powerManager =
+            getSystemService(Context.POWER_SERVICE) as PowerManager
+        keepServiceAliveWakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, packageName)
+        keepServiceAliveWakeLock?.acquire()
+
         return START_STICKY
     }
 
@@ -63,17 +70,22 @@ class ForegroundService : Service(), LifecycleOwner {
 
         lifecycleRegistry.currentState = Lifecycle.State.DESTROYED
         headGestureDetector.endSubscribe()
+        keepServiceAliveWakeLock?.release()
     }
 
     private fun wakeFromSleep() {
+        if (turnScreenOnWakeLock != null && turnScreenOnWakeLock?.isHeld == true) {
+            // prevent continuous call
+            return
+        }
         val wakelock = getPowerManager()
             .newWakeLock(
-                 PowerManager.FULL_WAKE_LOCK
+                 PowerManager.SCREEN_BRIGHT_WAKE_LOCK
                          or PowerManager.ACQUIRE_CAUSES_WAKEUP
-                         or PowerManager.ON_AFTER_RELEASE, ":disable_lock"
+                         or PowerManager.ON_AFTER_RELEASE, packageName
             )
-        wakelock.acquire(0)
-        wakelock.release()
+        wakelock.acquire(5000)
+        turnScreenOnWakeLock = wakelock
     }
 
     private fun getPowerManager(): PowerManager {

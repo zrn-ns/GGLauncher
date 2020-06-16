@@ -137,10 +137,6 @@ class WebViewAssistantActivityViewModel(context: Context): androidx.lifecycle.Vi
             PREF_CURRENT_VOLUME,
             DEFAULT_VOLUME
         )
-        Log.i(
-            TAG,
-            "setting audio track volume to: $initVolume"
-        )
         var userCredentials: UserCredentials? = null
         try {
             userCredentials =
@@ -172,10 +168,6 @@ class WebViewAssistantActivityViewModel(context: Context): androidx.lifecycle.Vi
             .setAudioVolume(initVolume)
             .setRequestCallback(object : EmbeddedAssistant.RequestCallback() {
                 override fun onRequestStart() {
-                    Log.i(
-                        TAG,
-                        "starting assistant request, enable microphones"
-                    )
                     requestStartAction()
                 }
 
@@ -195,10 +187,6 @@ class WebViewAssistantActivityViewModel(context: Context): androidx.lifecycle.Vi
                 }
 
                 override fun onVolumeChanged(percentage: Int) {
-                    Log.i(
-                        TAG,
-                        "assistant volume changed: $percentage"
-                    )
                     // Update our shared preferences
                     val editor = PreferenceManager.getDefaultSharedPreferences(
                         context
