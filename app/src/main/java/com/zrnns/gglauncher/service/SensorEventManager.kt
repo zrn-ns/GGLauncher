@@ -20,8 +20,8 @@ class SensorEventManager(context: Context) : SensorEventListener {
         const val STANDARD_GRAVITY_ACCELERATION = 10f
         const val DEGREES_FOR_LOOKUP_EVENT_DEPRESSION_THRESHOLD = -5
         const val DEGREES_FOR_LOOKUP_EVENT_DEPRESSION_VARIATION = -10
-        const val ABS_DEGREES_TOOK_OFF_JUDGEMENT_THRESHOLD = 1
-        const val SECS_TOOK_OFF_JUDGEMENT_THRESHOLD = 30
+        const val ABS_DEGREES_TOOK_OFF_JUDGEMENT_THRESHOLD = 0.5
+        const val SECS_TOOK_OFF_JUDGEMENT_THRESHOLD = 60
     }
 
     val onLookup: MutableLiveData<UUID?> = MutableLiveData(null)
@@ -55,7 +55,7 @@ class SensorEventManager(context: Context) : SensorEventListener {
 
             field = newValue
 
-            if (valueChanged) {
+            if (valueChanged && isTakeOff) {
                 onTakeOff.value = UUID.randomUUID()
             }
         }

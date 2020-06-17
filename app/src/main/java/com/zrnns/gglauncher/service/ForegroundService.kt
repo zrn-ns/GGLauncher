@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.IBinder
 import android.os.PowerManager
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
@@ -49,7 +50,9 @@ class ForegroundService : Service(), LifecycleOwner {
 
         screenStatusReceiver.startSubscribe()
         screenStatusReceiver.onScreenOn.observe(this, Observer {
-            if (!headGestureDetector.isSubscribing()) {
+            if (!headGestureDetector.isSubscribing) {
+                Log.i("INFO", "Wakeup from power saving mode.")
+
                 headGestureDetector.startSubscribe()
 
                 val powerManager =
@@ -60,15 +63,15 @@ class ForegroundService : Service(), LifecycleOwner {
         })
 
         headGestureDetector.startSubscribe()
-        headGestureDetector.onLookup?.observe(this, Observer {
+        headGestureDetector.onLookup.observe(this, Observer {
             it?.let {
                 wakeFromSleep()
             }
         })
-        headGestureDetector.onTakeOff?.observe(this, Observer {
+        headGestureDetector.onTakeOff.observe(this, Observer {
             it?.let {
+                Log.i("INFO", "Entering power saving mode...")
                 headGestureDetector.endSubscribe()
-                keepServiceAliveWakeLock?.release()
             }
         })
 

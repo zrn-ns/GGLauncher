@@ -7,33 +7,27 @@ import java.util.*
 
 class GlassHeadGestureDetector(val context: Context) {
 
-    var sensorEventManager: SensorEventManager? = null
+    var sensorEventManager: SensorEventManager = SensorEventManager(context)
 
-    val onLookup: LiveData<UUID?>?
+    val onLookup: LiveData<UUID?>
         get() {
-            return sensorEventManager?.onLookup
+            return sensorEventManager.onLookup
         }
 
-    val onTakeOff: LiveData<UUID?>?
+    val onTakeOff: LiveData<UUID?>
         get() {
-            return sensorEventManager?.onTakeOff
+            return sensorEventManager.onTakeOff
         }
 
-    fun isSubscribing(): Boolean {
-        return sensorEventManager != null
-    }
+    var isSubscribing: Boolean = false
 
     fun startSubscribe() {
-        endSubscribe()
-
-        val sensorEventManager = SensorEventManager(context)
-
-        this.sensorEventManager = sensorEventManager
+        isSubscribing = true
         sensorEventManager.startSubscribe()
     }
 
     fun endSubscribe() {
-        sensorEventManager?.endSubscribe()
-        sensorEventManager = null
+        sensorEventManager.endSubscribe()
+        isSubscribing = false
     }
 }
