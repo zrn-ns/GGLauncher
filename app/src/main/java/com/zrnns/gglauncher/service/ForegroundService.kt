@@ -18,6 +18,7 @@ import com.zrnns.gglauncher.R
 class ForegroundService : Service(), LifecycleOwner {
 
     private val headGestureDetector by lazy { GlassHeadGestureDetector(applicationContext) }
+    private val screenStatusReceiver by lazy { ScreenStatusReceiver(applicationContext) }
     private var keepServiceAliveWakeLock: PowerManager.WakeLock? = null
     private var turnScreenOnWakeLock: PowerManager.WakeLock? = null
 
@@ -46,10 +47,28 @@ class ForegroundService : Service(), LifecycleOwner {
             setSmallIcon(R.drawable.ic_launcher_foreground)
         }.build()
 
+        screenStatusReceiver.startSubscribe()
+        screenStatusReceiver.onScreenOn.observe(this, Observer {
+            if (!headGestureDetector.isSubscribing()) {
+                headGestureDetector.startSubscribe()
+
+                val powerManager =
+                    getSystemService(Context.POWER_SERVICE) as PowerManager
+                keepServiceAliveWakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, packageName)
+                keepServiceAliveWakeLock?.acquire()
+            }
+        })
+
         headGestureDetector.startSubscribe()
         headGestureDetector.onLookup?.observe(this, Observer {
             it?.let {
                 wakeFromSleep()
+            }
+        })
+        headGestureDetector.onTakeOff?.observe(this, Observer {
+            it?.let {
+                headGestureDetector.endSubscribe()
+                keepServiceAliveWakeLock?.release()
             }
         })
 
@@ -69,6 +88,7 @@ class ForegroundService : Service(), LifecycleOwner {
         super.onDestroy()
 
         lifecycleRegistry.currentState = Lifecycle.State.DESTROYED
+        screenStatusReceiver.endSubscribe()
         headGestureDetector.endSubscribe()
         keepServiceAliveWakeLock?.release()
     }

@@ -14,6 +14,15 @@ class GlassHeadGestureDetector(val context: Context) {
             return sensorEventManager?.onLookup
         }
 
+    val onTakeOff: LiveData<UUID?>?
+        get() {
+            return sensorEventManager?.onTakeOff
+        }
+
+    fun isSubscribing(): Boolean {
+        return sensorEventManager != null
+    }
+
     fun startSubscribe() {
         endSubscribe()
 

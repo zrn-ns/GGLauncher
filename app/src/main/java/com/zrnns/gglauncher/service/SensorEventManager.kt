@@ -25,24 +25,16 @@ class SensorEventManager(context: Context) : SensorEventListener {
     }
 
     val onLookup: MutableLiveData<UUID?> = MutableLiveData(null)
-    var isTakeOff: Boolean = false
-        set(newValue: Boolean) {
-            val valueChanged = field != newValue
-
-            field = newValue
-
-            if (valueChanged) {
-                endSubscribe()
-                startSubscribe()
-            }
-        }
+    var onTakeOff: MutableLiveData<UUID?> = MutableLiveData(null)
 
     fun startSubscribe() {
         // センサータイプを指定してセンサーを取得
         val accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
 
         // SensorManagerにリスナーを登録
-        val samplingFrequency = if (isTakeOff) SensorManager.SENSOR_DELAY_NORMAL else SensorManager.SENSOR_DELAY_UI
+        val samplingFrequency = SensorManager.SENSOR_DELAY_UI
+
+        isTakeOff = false
 
         sensorManager.registerListener(this, accelerometerSensor, samplingFrequency)
     }
@@ -56,6 +48,17 @@ class SensorEventManager(context: Context) : SensorEventListener {
     private var pitchLog: MutableList<Float> = mutableListOf()
 
     private var lastMotionDetectedDate = Date()
+
+    private var isTakeOff: Boolean = false
+        set(newValue: Boolean) {
+            val valueChanged = field != newValue
+
+            field = newValue
+
+            if (valueChanged) {
+                onTakeOff.value = UUID.randomUUID()
+            }
+        }
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
         // Do nothing
