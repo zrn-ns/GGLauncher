@@ -80,9 +80,9 @@ class ForegroundService : Service(), LifecycleOwner {
         }
         val wakelock = getPowerManager()
             .newWakeLock(
-                 PowerManager.SCREEN_BRIGHT_WAKE_LOCK
-                         or PowerManager.ACQUIRE_CAUSES_WAKEUP
-                         or PowerManager.ON_AFTER_RELEASE, packageName
+                PowerManager.FULL_WAKE_LOCK
+                        or PowerManager.ACQUIRE_CAUSES_WAKEUP
+                        or PowerManager.ON_AFTER_RELEASE, packageName
             )
         wakelock.acquire(5000)
         turnScreenOnWakeLock = wakelock
