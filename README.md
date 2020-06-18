@@ -14,6 +14,17 @@ It has the following features
 - Waking Up by Face Angle
 - power-saving mode
 
+## Installation
+
+- To install it, you need to get access to `Google Assistant SDK` and the `Youtube Data API` by using [google-oauthlib-tool](https://developers.google.com/assistant/sdk/guides/library/python/embed/install-sample) in advance.
+  Please save credential file as `PRODJECT_DIR/app/src/main/res/raw/credentials.json`.
+  Here's the scope you need:
+  - https://www.googleapis.com/auth/assistant-sdk-prototype
+  - https://www.googleapis.com/auth/youtube
+
+- Also, you need to put the Model ID in `src/main/res /raw/google_assistant_sdk_device_model_id.txt` obtained from the Actions Console.
+
+
 ## Future Plans
 
 The following features are planned to be implemented in the future
