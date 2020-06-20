@@ -9,6 +9,7 @@ import com.zrnns.gglauncher.R
 import kotlinx.android.synthetic.main.fragment_news.*
 import org.jsoup.Jsoup
 import org.jsoup.parser.Parser
+import java.io.IOException
 import java.util.*
 
 class NewsFragment : Fragment() {
@@ -35,7 +36,13 @@ class NewsFragment : Fragment() {
         Thread {
             if (isNewsNotLoadedOrStale()) {
                 val url = getRssURL()
-                val document = Jsoup.connect(url).parser(Parser.xmlParser()).get()
+
+                var document: org.jsoup.nodes.Document
+                try {
+                    document = Jsoup.connect(url).parser(Parser.xmlParser()).get()
+                } catch (e: IOException) {
+                    return@Thread
+                }
                 val titles = document.select("item>title").shuffled().take(2).map { it.html() }
 
                 latestNewsDataCache = CachedNewsData(titles.getOrNull(0), titles.getOrNull(1), Date())
