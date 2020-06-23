@@ -5,7 +5,6 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import java.util.*
 import kotlin.math.abs
@@ -85,7 +84,7 @@ class SensorEventManager(context: Context) : SensorEventListener {
                     onLookup.value = UUID.randomUUID()
                 }
 
-                Log.i("INFO", String.format("pitch: %.1f, pitchFirst: %.1f, pitchLast: %.1f, pitchDifference: %.1f", pitch, pitchLog.first(), pitchLog.last(), pitchLog.last() - pitchLog.first()))
+//                Log.i("INFO", String.format("pitch: %.1f, pitchFirst: %.1f, pitchLast: %.1f, pitchDifference: %.1f", pitch, pitchLog.first(), pitchLog.last(), pitchLog.last() - pitchLog.first()))
 
                 if (abs(depressionVariation) > ABS_DEGREES_TOOK_OFF_JUDGEMENT_THRESHOLD) {
                     lastMotionDetectedDate = Date()
