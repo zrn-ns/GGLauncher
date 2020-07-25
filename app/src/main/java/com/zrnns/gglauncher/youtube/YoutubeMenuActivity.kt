@@ -30,7 +30,8 @@ class YoutubeMenuActivity : CommonPagerActivity() {
     override var startPosition: Int = 0
     override var fragments: NonNullLiveData<List<Fragment>> = NonNullLiveData<List<Fragment>>(listOf(
             StandardTextPageFragment(R.string.youtube_menu_search),
-            StandardTextPageFragment(R.string.youtube_menu_playlists)
+            StandardTextPageFragment(R.string.youtube_menu_playlists),
+            StandardTextPageFragment(R.string.youtube_menu_likes)
         ))
 
     private val appName by lazy { applicationContext.getString(R.string.app_name) }
@@ -46,6 +47,9 @@ class YoutubeMenuActivity : CommonPagerActivity() {
                     }
                     1 -> {
                         fetchPlaylists()
+                    }
+                    2 -> {
+                        fetchLikes()
                     }
                 }
             }
@@ -124,6 +128,30 @@ class YoutubeMenuActivity : CommonPagerActivity() {
                     PlaylistsActivity.ACTIVITY_INPUT_PLAYLISTS,
                     ArrayList(playlists)
                 )
+                this.startActivity(intent)
+            }
+        }.start()
+    }
+
+    private fun fetchLikes() {
+        Thread {
+            // first, search videos
+            val search = youtube.Videos().list("snippet,contentDetails")
+            search.maxResults = 15
+            search.myRating = "like"
+
+            val searchResults = search.execute().items.map {
+                SearchResult(it.snippet.title,
+                    Date(it.snippet.publishedAt.value),
+                    it.snippet.thumbnails.medium.url,
+                    it.snippet.channelTitle,
+                    Duration.ZERO,
+                    it.id)
+            }
+
+            runOnUiThread {
+                val intent = Intent(this, SearchResultsActivity::class.java)
+                intent.putExtra(SearchResultsActivity.ACTIVITY_INPUT_SEARCH_RESULTS, ArrayList(searchResults))
                 this.startActivity(intent)
             }
         }.start()
